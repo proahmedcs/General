@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing Lines - Modal UI</title>
+  <title>Pricing Lines - Grouped Modal</title>
   <style>
     :root {
       --bg: #f3f6fb;
-      --card: #ffffff;
-      --text: #1c2434;
-      --muted: #667085;
-      --primary: #3b82f6;
-      --primary-dark: #1d4ed8;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --line: #e5e7eb;
-      --shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+      --card: #fff;
+      --line: #dce3ef;
+      --text: #122033;
+      --muted: #5f7088;
+      --primary: #2f6feb;
+      --primary-dark: #1f57c8;
+      --danger: #b42318;
+      --ok: #157347;
       --radius: 14px;
+      --shadow: 0 12px 30px rgba(13, 23, 45, 0.12);
     }
 
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(180deg, #f7f9ff 0%, #eef3fb 100%);
       color: var(--text);
+      background: linear-gradient(180deg, #f8faff 0%, #edf3fc 100%);
     }
 
     .app {
-      max-width: 1250px;
-      margin: 24px auto;
+      max-width: 1280px;
+      margin: 20px auto;
       padding: 0 16px 24px;
     }
 
@@ -38,231 +38,375 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 14px 18px;
+      padding: 14px 16px;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
-    .brand h1 {
+    .topbar h1 {
       margin: 0;
       font-size: 20px;
       font-weight: 700;
-      letter-spacing: .2px;
+      letter-spacing: 0.2px;
     }
-    .brand small { color: var(--muted); }
+    .topbar .sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
     .btn {
       border: 0;
       border-radius: 10px;
       padding: 10px 14px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: .2s ease;
+      transition: all .2s ease;
+      font-size: 13px;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-ghost {
-      background: #eef2ff;
-      color: #334155;
-    }
-    .btn-danger {
-      background: #fee2e2;
-      color: #991b1b;
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: var(--primary); color: #fff; }
+    .btn.primary:hover { background: var(--primary-dark); }
+    .btn.soft { background: #eaf1ff; color: #25427f; }
+    .btn.danger { background: #fee4e2; color: var(--danger); }
+
+    .status {
+      margin-left: auto;
+      padding: 6px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #edf5ff;
+      color: #1849a9;
+      border: 1px solid #cce0ff;
     }
 
-    .panel {
+    .table-panel {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    table { width: 100%; border-collapse: collapse; }
     thead th {
       text-align: left;
-      background: #f8fafc;
-      color: #475467;
-      font-size: 13px;
-      padding: 12px 14px;
+      background: #f8fbff;
+      color: #4e5f76;
+      font-size: 12px;
+      letter-spacing: 0.2px;
       border-bottom: 1px solid var(--line);
+      padding: 12px;
     }
     tbody td {
-      padding: 12px 14px;
-      border-bottom: 1px solid #edf2f7;
-      font-size: 14px;
+      padding: 12px;
+      border-bottom: 1px solid #e8edf5;
+      font-size: 13px;
     }
     tbody tr:hover { background: #f9fbff; }
-    .money { font-weight: 700; color: #1f3f8f; }
+    .money { font-weight: 700; color: #224280; }
     .row-actions { display: flex; gap: 8px; }
 
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.55);
+      background: rgba(7, 18, 38, 0.55);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 20px;
       z-index: 1000;
     }
     .modal-overlay.show { display: flex; }
 
     .modal {
-      width: min(1100px, 100%);
-      max-height: 92vh;
+      width: min(1300px, 100%);
+      max-height: 94vh;
       overflow: auto;
       background: #fff;
       border-radius: 18px;
-      box-shadow: 0 18px 45px rgba(2, 6, 23, .4);
-      border: 1px solid #e6ebf4;
+      border: 1px solid #dbe5f3;
+      box-shadow: 0 22px 55px rgba(5, 16, 35, 0.35);
     }
 
     .modal-head {
       position: sticky;
       top: 0;
-      z-index: 5;
-      background: linear-gradient(90deg, #2563eb, #4f46e5);
+      z-index: 7;
+      background: linear-gradient(90deg, #2f6feb, #4f46e5);
       color: #fff;
-      padding: 16px 18px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
     }
     .modal-head h2 { margin: 0; font-size: 18px; }
-    .close-x {
-      border: 0;
-      background: rgba(255,255,255,.18);
-      color: #fff;
+    .modal-head .meta {
+      font-size: 12px;
+      opacity: .95;
+      font-weight: 600;
+    }
+    .close {
+      width: 34px;
+      height: 34px;
       border-radius: 8px;
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
+      border: 0;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.18);
       font-size: 18px;
+      cursor: pointer;
     }
 
-    .modal-body {
+    .modal-content {
+      padding: 14px;
       display: grid;
-      grid-template-columns: 1.3fr .7fr;
-      gap: 16px;
-      padding: 16px;
+      gap: 12px;
     }
 
-    .group {
+    .top-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+    }
+
+    .card {
       border: 1px solid var(--line);
       border-radius: 12px;
+      background: #fff;
       padding: 12px;
-      margin-bottom: 12px;
-      background: #fcfdff;
     }
-    .group h3 {
+    .card h3 {
       margin: 0 0 10px;
       font-size: 14px;
-      color: #111827;
+      letter-spacing: .2px;
     }
 
-    .grid {
+    .form-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      grid-template-columns: repeat(3, minmax(170px, 1fr));
       gap: 10px;
     }
 
     label {
       display: block;
       font-size: 12px;
-      font-weight: 600;
-      color: #475467;
-      margin-bottom: 6px;
+      color: #5a6c84;
+      margin-bottom: 5px;
+      font-weight: 700;
     }
-    input, select {
+
+    input, select, textarea {
       width: 100%;
-      border: 1px solid #d0d7e4;
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 14px;
-      outline: none;
-      background: #fff;
-    }
-    input:focus, select:focus {
-      border-color: #7da7ff;
-      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
-    }
-
-    .toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
+      border-radius: 9px;
+      border: 1px solid #ccd7e8;
+      padding: 8px 10px;
       font-size: 13px;
-      color: #334155;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #81a8ff;
+      box-shadow: 0 0 0 3px rgba(47, 111, 235, 0.15);
     }
 
-    .summary {
-      position: sticky;
-      top: 76px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px;
-      height: fit-content;
-      background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+    .summary-grid {
+      display: grid;
+      gap: 7px;
     }
-    .summary h3 { margin: 0 0 10px; }
     .metric {
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px dashed #c9d5ee;
-      padding: 8px 0;
-      font-size: 14px;
+      border-bottom: 1px dashed #cad7ee;
+      padding-bottom: 7px;
+      font-size: 13px;
     }
-    .metric strong { color: #0f172a; }
+    .metric strong { color: #102748; }
+
+    .section-head {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fbfdff;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tab-btn {
+      border: 1px solid #cbd8ee;
+      background: #fff;
+      color: #2e4b83;
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #e9f1ff;
+      border-color: #8fb2ff;
+      color: #0b3ea6;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px;
+      max-height: 44vh;
+      overflow: auto;
+    }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed #cdd9ec;
+      border-radius: 10px;
+      text-align: center;
+      color: var(--muted);
+      background: #fafcff;
+      font-size: 13px;
+    }
+
+    .config-group {
+      border: 1px solid #d9e4f5;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .group-head {
+      background: #f5f9ff;
+      padding: 9px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #213f78;
+      border-bottom: 1px solid #d9e4f5;
+    }
+    .pill {
+      background: #e8f1ff;
+      border: 1px solid #c5d9ff;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+    }
+
+    .param-row {
+      padding: 10px;
+      border-bottom: 1px solid #e9eff8;
+      background: #fff;
+    }
+    .param-row:last-child { border-bottom: 0; }
+    .param-title {
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #30465f;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .param-title .idx {
+      background: #edf2fb;
+      border: 1px solid #d5dfef;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-weight: 800;
+      color: #3f5879;
+    }
+    .param-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 8px;
+    }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid #d7e2f3;
+      border-radius: 9px;
+      padding: 8px 9px;
+      background: #fcfdff;
+      min-height: 37px;
+    }
+    .check input { width: auto; margin: 0; }
+    .check span {
+      font-size: 12px;
+      color: #334a68;
+      font-weight: 700;
+    }
 
     .modal-foot {
       position: sticky;
       bottom: 0;
-      z-index: 5;
       background: #fff;
       border-top: 1px solid var(--line);
-      padding: 12px 16px;
+      padding: 10px 14px;
       display: flex;
       justify-content: flex-end;
       gap: 10px;
+      z-index: 6;
     }
 
-    @media (max-width: 980px) {
-      .modal-body { grid-template-columns: 1fr; }
-      .summary { position: static; }
-      .grid { grid-template-columns: 1fr; }
-      table { font-size: 13px; }
+    pre.raw {
+      margin: 0;
+      background: #0e1a2b;
+      color: #c8defc;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 11px;
+      overflow: auto;
+      max-height: 39vh;
+    }
+
+    @media (max-width: 1100px) {
+      .top-grid { grid-template-columns: 1fr; }
+      .form-grid, .param-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .form-grid, .param-grid { grid-template-columns: 1fr; }
+      .topbar { flex-direction: column; align-items: stretch; }
+      .btn-row { justify-content: stretch; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="brand">
+      <div>
         <h1>Pricing Engine - Costing Lines</h1>
-        <small>Organized line management with grouped modal editor</small>
+        <div class="sub">Modal editor with Basic Info, Summary, tabs, and grouped parameters from JSON</div>
       </div>
-      <div class="actions">
-        <button class="btn btn-ghost">Export CSV</button>
-        <button id="addLineBtn" class="btn btn-primary">+ Add New Line</button>
+      <div class="btn-row">
+        <button class="btn soft" type="button">Export CSV</button>
+        <button id="addLineBtn" class="btn primary" type="button">+ Add New Line</button>
       </div>
+      <div id="loadStatus" class="status">Loading JSON fields...</div>
     </div>
 
-    <div class="panel">
-      <table id="linesTable">
+    <div class="table-panel">
+      <table>
         <thead>
           <tr>
             <th>#</th>
@@ -283,137 +427,160 @@
   <div id="modalOverlay" class="modal-overlay">
     <div class="modal">
       <div class="modal-head">
-        <h2 id="modalTitle">Add New Line</h2>
-        <button class="close-x" id="closeModalBtn">&times;</button>
+        <div>
+          <h2 id="modalTitle">Add New Line</h2>
+          <div id="modalMeta" class="meta">Basic Info + Summary + grouped tabs</div>
+        </div>
+        <button id="closeModalBtn" class="close" type="button" aria-label="Close">&times;</button>
       </div>
 
-      <div class="modal-body">
-        <form id="lineForm">
-          <div class="group">
-            <h3>1) Basic Details</h3>
-            <div class="grid">
+      <div class="modal-content">
+        <div class="top-grid">
+          <section class="card">
+            <h3>Basic Info</h3>
+            <div class="form-grid">
               <div>
-                <label>Role / Position</label>
+                <label for="role">Role / Position</label>
                 <input id="role" required />
               </div>
               <div>
-                <label>Nationality</label>
+                <label for="nationality">Nationality</label>
                 <select id="nationality">
-                  <option>SAU</option><option>IND</option><option>EGY</option><option>PAK</option><option>PHL</option>
+                  <option>SAU</option>
+                  <option>IND</option>
+                  <option>EGY</option>
+                  <option>PAK</option>
+                  <option>PHL</option>
                 </select>
               </div>
               <div>
-                <label>Quantity</label>
+                <label for="qty">Quantity</label>
                 <input id="qty" type="number" min="1" value="1" />
               </div>
               <div>
-                <label>Contract Type</label>
+                <label for="contractType">Contract Type</label>
                 <select id="contractType">
                   <option>Monthly</option>
                   <option>Yearly</option>
                   <option>Project Based</option>
                 </select>
               </div>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>2) Compensation &amp; Allowances</h3>
-            <div class="grid">
               <div>
-                <label>Base Salary</label>
+                <label for="clientName">Client</label>
+                <input id="clientName" value="Aramco" />
+              </div>
+              <div>
+                <label for="projectName">Project</label>
+                <input id="projectName" value="Master Client" />
+              </div>
+              <div>
+                <label for="baseSalary">Base Salary</label>
                 <input id="baseSalary" type="number" step="0.01" value="5000" />
               </div>
               <div>
-                <label>Allowance</label>
+                <label for="allowance">Allowance</label>
                 <input id="allowance" type="number" step="0.01" value="500" />
               </div>
               <div>
-                <label>Overtime</label>
+                <label for="overtime">Overtime</label>
                 <input id="overtime" type="number" step="0.01" value="0" />
               </div>
               <div>
-                <label>Other Cost</label>
+                <label for="otherCost">Other Cost</label>
                 <input id="otherCost" type="number" step="0.01" value="0" />
               </div>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>3) Gov. &amp; Operational Fees</h3>
-            <div class="grid">
               <div>
-                <label>Gov Fees</label>
+                <label for="govFees">Gov. Fees</label>
                 <input id="govFees" type="number" step="0.01" value="200" />
               </div>
               <div>
-                <label>Insurance</label>
+                <label for="insurance">Insurance</label>
                 <input id="insurance" type="number" step="0.01" value="150" />
               </div>
-            </div>
-            <div class="toggle-wrap">
-              <input id="familyStatus" type="checkbox" />
-              <label for="familyStatus" style="margin:0;">Enable Family Status</label>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>4) Quotation Scopes</h3>
-            <div class="grid">
-              <div class="toggle-wrap"><input id="scopeAjeer" type="checkbox" /> <label for="scopeAjeer" style="margin:0;">Ajeer Scope</label></div>
-              <div class="toggle-wrap"><input id="scopeVisa" type="checkbox" checked /> <label for="scopeVisa" style="margin:0;">Visa Scope</label></div>
-              <div class="toggle-wrap"><input id="scopeMedical" type="checkbox" checked /> <label for="scopeMedical" style="margin:0;">Medical Scope</label></div>
-              <div class="toggle-wrap"><input id="scopeTicket" type="checkbox" /> <label for="scopeTicket" style="margin:0;">Ticket Scope</label></div>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>5) Pricing Margins &amp; Overheads</h3>
-            <div class="grid">
               <div>
-                <label>Markup (%)</label>
+                <label for="markup">Markup (%)</label>
                 <input id="markup" type="number" step="0.01" value="12" />
               </div>
               <div>
-                <label>Discount (%)</label>
+                <label for="discount">Discount (%)</label>
                 <input id="discount" type="number" step="0.01" value="0" />
               </div>
             </div>
-          </div>
-        </form>
+          </section>
 
-        <aside class="summary">
-          <h3>Live Summary</h3>
-          <div class="metric"><span>Service Price</span><strong id="sumService">SAR 0.00</strong></div>
-          <div class="metric"><span>VAT (15%)</span><strong id="sumVat">SAR 0.00</strong></div>
-          <div class="metric"><span>Net + VAT</span><strong id="sumNet">SAR 0.00</strong></div>
-          <div class="metric"><span>Total for Qty</span><strong id="sumTotal">SAR 0.00</strong></div>
-        </aside>
+          <aside class="card">
+            <h3>Summary</h3>
+            <div class="summary-grid">
+              <div class="metric"><span>Service Price</span><strong id="sumService">SAR 0.00</strong></div>
+              <div class="metric"><span>VAT (15%)</span><strong id="sumVat">SAR 0.00</strong></div>
+              <div class="metric"><span>Net + VAT</span><strong id="sumNet">SAR 0.00</strong></div>
+              <div class="metric"><span>Total for Qty</span><strong id="sumTotal">SAR 0.00</strong></div>
+              <div class="metric"><span>Total JSON Records</span><strong id="sumRecords">0</strong></div>
+              <div class="metric"><span>Configured Total Fees</span><strong id="sumFees">0</strong></div>
+              <div class="metric"><span>Configured General Settings</span><strong id="sumSettings">0</strong></div>
+            </div>
+          </aside>
+        </div>
+
+        <section class="section-head">
+          <div class="tabs" id="tabs"></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; min-width:280px;">
+            <input id="configSearch" type="text" placeholder="Search fields in current tab..." />
+            <button id="downloadJsonBtn" class="btn soft" type="button">Download JSON</button>
+          </div>
+        </section>
+
+        <section class="panel" id="tabPanel"></section>
       </div>
 
       <div class="modal-foot">
-        <button class="btn btn-ghost" id="cancelBtn" type="button">Cancel</button>
-        <button class="btn btn-primary" id="saveBtn" type="button">Save Line</button>
+        <button id="cancelBtn" class="btn soft" type="button">Cancel</button>
+        <button id="saveBtn" class="btn primary" type="button">Save Line</button>
       </div>
     </div>
   </div>
 
   <script>
     const VAT_RATE = 0.15;
-    const rowsEl = document.getElementById("lineRows");
-    const modal = document.getElementById("modalOverlay");
-    const modalTitle = document.getElementById("modalTitle");
+    const DATASET_URL = "./quotation-fees-and-settings.json";
+    const TAB_KEYS = ["quotation", "fees", "settings", "raw"];
 
     let editIndex = null;
+    let currentTab = "quotation";
+    let configSearch = "";
+    let configData = [];
     let lines = [
-      { role: "Project Manager", nationality: "SAU", qty: 1, service: 12000 },
+      { role: "Project Manager (Lead)", nationality: "SAU", qty: 1, service: 48775.0 },
       { role: "Maintenance Foreman", nationality: "IND", qty: 8, service: 6717.5 }
     ];
 
-    const fields = {
+    const el = {
+      lineRows: document.getElementById("lineRows"),
+      loadStatus: document.getElementById("loadStatus"),
+      modal: document.getElementById("modalOverlay"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalMeta: document.getElementById("modalMeta"),
+      tabs: document.getElementById("tabs"),
+      tabPanel: document.getElementById("tabPanel"),
+      configSearch: document.getElementById("configSearch"),
+      downloadJsonBtn: document.getElementById("downloadJsonBtn"),
+      addLineBtn: document.getElementById("addLineBtn"),
+      closeModalBtn: document.getElementById("closeModalBtn"),
+      cancelBtn: document.getElementById("cancelBtn"),
+      saveBtn: document.getElementById("saveBtn"),
+      sumService: document.getElementById("sumService"),
+      sumVat: document.getElementById("sumVat"),
+      sumNet: document.getElementById("sumNet"),
+      sumTotal: document.getElementById("sumTotal"),
+      sumRecords: document.getElementById("sumRecords"),
+      sumFees: document.getElementById("sumFees"),
+      sumSettings: document.getElementById("sumSettings"),
       role: document.getElementById("role"),
       nationality: document.getElementById("nationality"),
       qty: document.getElementById("qty"),
+      contractType: document.getElementById("contractType"),
+      clientName: document.getElementById("clientName"),
+      projectName: document.getElementById("projectName"),
       baseSalary: document.getElementById("baseSalary"),
       allowance: document.getElementById("allowance"),
       overtime: document.getElementById("overtime"),
@@ -424,145 +591,469 @@
       discount: document.getElementById("discount")
     };
 
-    const summary = {
-      service: document.getElementById("sumService"),
-      vat: document.getElementById("sumVat"),
-      net: document.getElementById("sumNet"),
-      total: document.getElementById("sumTotal")
-    };
+    function toSAR(value) {
+      return `SAR ${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
 
-    const formatSAR = n => `SAR ${Number(n).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    function esc(text) {
+      return String(text ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-    function calcService() {
-      const base = +fields.baseSalary.value || 0;
-      const allowance = +fields.allowance.value || 0;
-      const overtime = +fields.overtime.value || 0;
-      const other = +fields.otherCost.value || 0;
-      const gov = +fields.govFees.value || 0;
-      const ins = +fields.insurance.value || 0;
-      const markup = (+fields.markup.value || 0) / 100;
-      const discount = (+fields.discount.value || 0) / 100;
-      const raw = base + allowance + overtime + other + gov + ins;
-      const withMarkup = raw * (1 + markup);
-      return withMarkup * (1 - discount);
+    function normalizeItem(item = {}) {
+      return {
+        QuotationName: item.QuotationName ?? "",
+        QuotationValue: item.QuotationValue ?? "",
+        QuotationMapTo: item.QuotationMapTo ?? null,
+        TotalFeesName: item.TotalFeesName ?? "",
+        TotalFeesValue: item.TotalFeesValue ?? "",
+        GeneralSettingName: item.GeneralSettingName ?? "",
+        GeneralSettingValue: item.GeneralSettingValue ?? "",
+        QuotationIsEnabled: Boolean(item.QuotationIsEnabled),
+        QuotationIsVisible: item.QuotationIsVisible !== false,
+        QuotationEnabledForTeam: item.QuotationEnabledForTeam ?? null,
+        QuotationVisibleForTeam: item.QuotationVisibleForTeam ?? null,
+        TotalFeesIsEnabled: Boolean(item.TotalFeesIsEnabled),
+        TotalFeesIsVisible: item.TotalFeesIsVisible !== false,
+        TotalFeesEnabledForTeam: item.TotalFeesEnabledForTeam ?? null,
+        TotalFeesVisibleForTeam: item.TotalFeesVisibleForTeam ?? null
+      };
+    }
+
+    function smartParse(value) {
+      const raw = value.trim();
+      if (raw === "") return "";
+      if (raw === "null") return null;
+      if (raw === "true") return true;
+      if (raw === "false") return false;
+      const n = Number(raw);
+      return Number.isNaN(n) ? value : n;
+    }
+
+    async function loadConfigData() {
+      try {
+        const response = await fetch(DATASET_URL, { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        if (!Array.isArray(payload)) throw new Error("JSON payload is not an array");
+        configData = payload.map(normalizeItem);
+        el.loadStatus.textContent = `Loaded ${configData.length} JSON records`;
+        el.loadStatus.style.background = "#ecfdf3";
+        el.loadStatus.style.color = "#067647";
+        el.loadStatus.style.borderColor = "#a6f4c5";
+      } catch (error) {
+        configData = [];
+        el.loadStatus.textContent = "Could not load JSON fields. Open using localhost server.";
+        el.loadStatus.style.background = "#fff1f1";
+        el.loadStatus.style.color = "#b42318";
+        el.loadStatus.style.borderColor = "#fecaca";
+        console.error("Failed to load JSON data:", error);
+      }
+      renderTabs();
+      renderCurrentTab();
+      updateSummary();
+    }
+
+    function calcServicePrice() {
+      const base = Number(el.baseSalary.value) || 0;
+      const allowance = Number(el.allowance.value) || 0;
+      const overtime = Number(el.overtime.value) || 0;
+      const otherCost = Number(el.otherCost.value) || 0;
+      const govFees = Number(el.govFees.value) || 0;
+      const insurance = Number(el.insurance.value) || 0;
+      const markup = (Number(el.markup.value) || 0) / 100;
+      const discount = (Number(el.discount.value) || 0) / 100;
+      const raw = base + allowance + overtime + otherCost + govFees + insurance;
+      return raw * (1 + markup) * (1 - discount);
     }
 
     function updateSummary() {
-      const service = calcService();
-      const qty = +fields.qty.value || 0;
+      const service = calcServicePrice();
       const vat = service * VAT_RATE;
-      const net = service + vat;
-      summary.service.textContent = formatSAR(service);
-      summary.vat.textContent = formatSAR(vat);
-      summary.net.textContent = formatSAR(net);
-      summary.total.textContent = formatSAR(net * qty);
+      const qty = Number(el.qty.value) || 0;
+      el.sumService.textContent = toSAR(service);
+      el.sumVat.textContent = toSAR(vat);
+      el.sumNet.textContent = toSAR(service + vat);
+      el.sumTotal.textContent = toSAR((service + vat) * qty);
+      el.sumRecords.textContent = String(configData.length);
+      el.sumFees.textContent = String(configData.filter((x) => String(x.TotalFeesName || "").trim()).length);
+      el.sumSettings.textContent = String(configData.filter((x) => String(x.GeneralSettingName || "").trim()).length);
     }
 
     function renderTable() {
-      rowsEl.innerHTML = "";
+      el.lineRows.innerHTML = "";
       lines.forEach((line, i) => {
         const vat = line.service * VAT_RATE;
         const net = line.service + vat;
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+        const row = document.createElement("tr");
+        row.innerHTML = `
           <td>${i + 1}</td>
-          <td>${line.role}</td>
-          <td>${line.nationality}</td>
+          <td>${esc(line.role)}</td>
+          <td>${esc(line.nationality)}</td>
           <td>${line.qty}</td>
-          <td class="money">${formatSAR(line.service)}</td>
-          <td>${formatSAR(vat)}</td>
-          <td class="money">${formatSAR(net * line.qty)}</td>
+          <td class="money">${toSAR(line.service)}</td>
+          <td>${toSAR(vat)}</td>
+          <td class="money">${toSAR(net * line.qty)}</td>
           <td class="row-actions">
-            <button class="btn btn-ghost" onclick="openEdit(${i})">Edit</button>
-            <button class="btn btn-danger" onclick="removeLine(${i})">Delete</button>
+            <button class="btn soft" type="button" data-action="edit" data-index="${i}">Edit</button>
+            <button class="btn danger" type="button" data-action="delete" data-index="${i}">Delete</button>
           </td>
         `;
-        rowsEl.appendChild(tr);
+        el.lineRows.appendChild(row);
       });
     }
 
-    function openModal() { modal.classList.add("show"); }
-    function closeModal() {
-      modal.classList.remove("show");
-      editIndex = null;
+    function openModal() {
+      el.modal.classList.add("show");
     }
 
-    function resetForm() {
-      document.getElementById("lineForm").reset();
-      fields.qty.value = 1;
-      fields.baseSalary.value = 5000;
-      fields.allowance.value = 500;
-      fields.overtime.value = 0;
-      fields.otherCost.value = 0;
-      fields.govFees.value = 200;
-      fields.insurance.value = 150;
-      fields.markup.value = 12;
-      fields.discount.value = 0;
+    function closeModal() {
+      el.modal.classList.remove("show");
+      editIndex = null;
+      configSearch = "";
+      el.configSearch.value = "";
+    }
+
+    function resetModalForm() {
+      el.role.value = "";
+      el.nationality.value = "SAU";
+      el.qty.value = 1;
+      el.contractType.value = "Monthly";
+      el.clientName.value = "Aramco";
+      el.projectName.value = "Master Client";
+      el.baseSalary.value = 5000;
+      el.allowance.value = 500;
+      el.overtime.value = 0;
+      el.otherCost.value = 0;
+      el.govFees.value = 200;
+      el.insurance.value = 150;
+      el.markup.value = 12;
+      el.discount.value = 0;
+      currentTab = "quotation";
+      renderTabs();
+      renderCurrentTab();
       updateSummary();
     }
 
     function openAdd() {
-      modalTitle.textContent = "Add New Line";
       editIndex = null;
-      resetForm();
+      el.modalTitle.textContent = "Add New Line";
+      el.modalMeta.textContent = "Basic Info + Summary + grouped parameter tabs";
+      resetModalForm();
       openModal();
     }
 
-    window.openEdit = function(index) {
+    function openEdit(index) {
       const line = lines[index];
+      if (!line) return;
       editIndex = index;
-      modalTitle.textContent = `Edit Line #${index + 1}`;
-      resetForm();
-      fields.role.value = line.role;
-      fields.nationality.value = line.nationality;
-      fields.qty.value = line.qty;
-      fields.baseSalary.value = (line.service * 0.7).toFixed(2);
-      fields.allowance.value = (line.service * 0.1).toFixed(2);
-      fields.overtime.value = (line.service * 0.05).toFixed(2);
-      fields.otherCost.value = (line.service * 0.05).toFixed(2);
-      fields.govFees.value = (line.service * 0.05).toFixed(2);
-      fields.insurance.value = (line.service * 0.05).toFixed(2);
-      fields.markup.value = 8;
-      fields.discount.value = 0;
+      el.modalTitle.textContent = `Edit Line #${index + 1}`;
+      el.modalMeta.textContent = `${line.role} - ${line.nationality}`;
+      resetModalForm();
+      el.role.value = line.role;
+      el.nationality.value = line.nationality;
+      el.qty.value = line.qty;
+      el.baseSalary.value = (line.service * 0.72).toFixed(2);
+      el.allowance.value = (line.service * 0.1).toFixed(2);
+      el.overtime.value = (line.service * 0.06).toFixed(2);
+      el.otherCost.value = (line.service * 0.03).toFixed(2);
+      el.govFees.value = (line.service * 0.05).toFixed(2);
+      el.insurance.value = (line.service * 0.04).toFixed(2);
+      el.markup.value = 8;
+      el.discount.value = 0;
       updateSummary();
       openModal();
-    };
-
-    window.removeLine = function(index) {
-      if (!confirm("Delete this line?")) return;
-      lines.splice(index, 1);
-      renderTable();
-    };
+    }
 
     function saveLine() {
-      if (!fields.role.value.trim()) {
+      const role = el.role.value.trim();
+      if (!role) {
         alert("Role / Position is required.");
         return;
       }
-
       const item = {
-        role: fields.role.value.trim(),
-        nationality: fields.nationality.value,
-        qty: +fields.qty.value || 1,
-        service: calcService()
+        role,
+        nationality: el.nationality.value,
+        qty: Math.max(1, Number(el.qty.value) || 1),
+        service: calcServicePrice()
       };
-
       if (editIndex === null) lines.push(item);
       else lines[editIndex] = item;
-
       renderTable();
       closeModal();
     }
 
-    document.getElementById("addLineBtn").addEventListener("click", openAdd);
-    document.getElementById("closeModalBtn").addEventListener("click", closeModal);
-    document.getElementById("cancelBtn").addEventListener("click", closeModal);
-    document.getElementById("saveBtn").addEventListener("click", saveLine);
-    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+    function removeLine(index) {
+      if (!Number.isInteger(index) || !lines[index]) return;
+      if (!confirm("Delete this line?")) return;
+      lines.splice(index, 1);
+      renderTable();
+    }
 
-    Object.values(fields).forEach(el => el.addEventListener("input", updateSummary));
+    function filterBySearch(items, tabKey) {
+      const needle = configSearch.trim().toLowerCase();
+      if (!needle) return items;
+      return items.filter((item) => {
+        if (tabKey === "quotation") {
+          const text = [
+            item.QuotationName,
+            item.QuotationValue,
+            item.QuotationMapTo,
+            item.QuotationEnabledForTeam,
+            item.QuotationVisibleForTeam
+          ].join(" ").toLowerCase();
+          return text.includes(needle);
+        }
+        if (tabKey === "fees") {
+          const text = [
+            item.QuotationName,
+            item.TotalFeesName,
+            item.TotalFeesValue,
+            item.TotalFeesEnabledForTeam,
+            item.TotalFeesVisibleForTeam
+          ].join(" ").toLowerCase();
+          return text.includes(needle);
+        }
+        if (tabKey === "settings") {
+          const text = [
+            item.QuotationName,
+            item.GeneralSettingName,
+            item.GeneralSettingValue
+          ].join(" ").toLowerCase();
+          return text.includes(needle);
+        }
+        return JSON.stringify(item).toLowerCase().includes(needle);
+      });
+    }
+
+    function renderTabs() {
+      const counts = {
+        quotation: configData.length,
+        fees: configData.filter((x) => String(x.TotalFeesName || "").trim()).length,
+        settings: configData.filter((x) => String(x.GeneralSettingName || "").trim()).length,
+        raw: configData.length
+      };
+      el.tabs.innerHTML = "";
+      [
+        { key: "quotation", label: `Quotation Fields (${counts.quotation})` },
+        { key: "fees", label: `Total Fees (${counts.fees})` },
+        { key: "settings", label: `General Settings (${counts.settings})` },
+        { key: "raw", label: "Raw JSON" }
+      ].forEach((tab) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `tab-btn ${tab.key === currentTab ? "active" : ""}`;
+        btn.textContent = tab.label;
+        btn.dataset.tab = tab.key;
+        el.tabs.appendChild(btn);
+      });
+    }
+
+    function renderGroup(title, items, renderer) {
+      if (!items.length) {
+        return `
+          <section class="config-group">
+            <div class="group-head"><span>${esc(title)}</span><span class="pill">0</span></div>
+            <div class="param-row"><div class="empty">No records in this group</div></div>
+          </section>
+        `;
+      }
+      return `
+        <section class="config-group">
+          <div class="group-head"><span>${esc(title)}</span><span class="pill">${items.length}</span></div>
+          ${items.map(renderer).join("")}
+        </section>
+      `;
+    }
+
+    function quotationRow(item, idx) {
+      return `
+        <div class="param-row">
+          <div class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.QuotationName || "(Unnamed quotation)")}</strong></div>
+          <div class="param-grid">
+            <div><label>Quotation Name</label><input data-idx="${idx}" data-field="QuotationName" value="${esc(item.QuotationName)}" /></div>
+            <div><label>Quotation Value (Formula)</label><input data-idx="${idx}" data-field="QuotationValue" value="${esc(item.QuotationValue)}" /></div>
+            <div><label>Map To</label><input data-idx="${idx}" data-field="QuotationMapTo" value="${esc(item.QuotationMapTo ?? "")}" placeholder="new_fieldname" /></div>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsEnabled" ${item.QuotationIsEnabled ? "checked" : ""} /><span>Enabled</span></label>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsVisible" ${item.QuotationIsVisible ? "checked" : ""} /><span>Visible</span></label>
+            <div><label>Enabled For Team</label><input data-idx="${idx}" data-field="QuotationEnabledForTeam" value="${esc(item.QuotationEnabledForTeam ?? "")}" placeholder="team guid" /></div>
+            <div><label>Visible For Team</label><input data-idx="${idx}" data-field="QuotationVisibleForTeam" value="${esc(item.QuotationVisibleForTeam ?? "")}" placeholder="team guid" /></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function feesRow(item, idx) {
+      return `
+        <div class="param-row">
+          <div class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.TotalFeesName || "(No TotalFeesName)")}</strong><span>- ${esc(item.QuotationName)}</span></div>
+          <div class="param-grid">
+            <div><label>Total Fees Name</label><input data-idx="${idx}" data-field="TotalFeesName" value="${esc(item.TotalFeesName)}" /></div>
+            <div><label>Total Fees Value</label><input data-idx="${idx}" data-field="TotalFeesValue" value="${esc(item.TotalFeesValue)}" /></div>
+            <div><label>Related Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsEnabled" ${item.TotalFeesIsEnabled ? "checked" : ""} /><span>Enabled</span></label>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsVisible" ${item.TotalFeesIsVisible ? "checked" : ""} /><span>Visible</span></label>
+            <div><label>Enabled For Team</label><input data-idx="${idx}" data-field="TotalFeesEnabledForTeam" value="${esc(item.TotalFeesEnabledForTeam ?? "")}" placeholder="team guid" /></div>
+            <div><label>Visible For Team</label><input data-idx="${idx}" data-field="TotalFeesVisibleForTeam" value="${esc(item.TotalFeesVisibleForTeam ?? "")}" placeholder="team guid" /></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function settingsRow(item, idx) {
+      return `
+        <div class="param-row">
+          <div class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.GeneralSettingName || "(No setting name)")}</strong><span>- ${esc(item.QuotationName)}</span></div>
+          <div class="param-grid">
+            <div><label>General Setting Name</label><input data-idx="${idx}" data-field="GeneralSettingName" value="${esc(item.GeneralSettingName)}" /></div>
+            <div><label>General Setting Value</label><input data-idx="${idx}" data-field="GeneralSettingValue" value="${esc(item.GeneralSettingValue)}" placeholder="number / text / true / false" /></div>
+            <div><label>Linked Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCurrentTab() {
+      if (currentTab === "raw") {
+        const filtered = filterBySearch(configData, "raw");
+        el.tabPanel.innerHTML = `
+          <div class="group-head" style="border-radius: 10px;">
+            <span>Raw JSON preview</span><span class="pill">${filtered.length} records</span>
+          </div>
+          <pre class="raw">${esc(JSON.stringify(filtered, null, 2))}</pre>
+        `;
+        return;
+      }
+
+      if (!configData.length) {
+        el.tabPanel.innerHTML = `<div class="empty">No JSON records found. Ensure <code>quotation-fees-and-settings.json</code> exists and is valid.</div>`;
+        return;
+      }
+
+      if (currentTab === "quotation") {
+        const filtered = filterBySearch(configData, "quotation");
+        const mapped = filtered
+          .map((item, idx) => ({ item, idx }))
+          .filter((x) => String(x.item.QuotationMapTo || "").trim());
+        const unmapped = filtered
+          .map((item, idx) => ({ item, idx }))
+          .filter((x) => !String(x.item.QuotationMapTo || "").trim());
+        el.tabPanel.innerHTML =
+          renderGroup("Mapped Quotation Fields", mapped, ({ item, idx }) => quotationRow(item, idx)) +
+          renderGroup("Unmapped Quotation Fields", unmapped, ({ item, idx }) => quotationRow(item, idx));
+        return;
+      }
+
+      if (currentTab === "fees") {
+        const filtered = filterBySearch(configData, "fees");
+        const configured = filtered
+          .map((item, idx) => ({ item, idx }))
+          .filter((x) => String(x.item.TotalFeesName || "").trim());
+        const emptyFees = filtered
+          .map((item, idx) => ({ item, idx }))
+          .filter((x) => !String(x.item.TotalFeesName || "").trim());
+        el.tabPanel.innerHTML =
+          renderGroup("Configured Total Fees", configured, ({ item, idx }) => feesRow(item, idx)) +
+          renderGroup("Without Total Fees Name", emptyFees, ({ item, idx }) => feesRow(item, idx));
+        return;
+      }
+
+      if (currentTab === "settings") {
+        const filtered = filterBySearch(configData, "settings");
+        const configured = filtered
+          .map((item, idx) => ({ item, idx }))
+          .filter((x) => String(x.item.GeneralSettingName || "").trim());
+        const emptySettings = filtered
+          .map((item, idx) => ({ item, idx }))
+          .filter((x) => !String(x.item.GeneralSettingName || "").trim());
+        el.tabPanel.innerHTML =
+          renderGroup("Configured General Settings", configured, ({ item, idx }) => settingsRow(item, idx)) +
+          renderGroup("Without General Setting Name", emptySettings, ({ item, idx }) => settingsRow(item, idx));
+        return;
+      }
+
+      el.tabPanel.innerHTML = `<div class="empty">Unsupported tab</div>`;
+    }
+
+    function downloadJSON() {
+      const blob = new Blob([JSON.stringify(configData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "quotation-fees-and-settings.updated.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function attachEvents() {
+      el.addLineBtn.addEventListener("click", openAdd);
+      el.closeModalBtn.addEventListener("click", closeModal);
+      el.cancelBtn.addEventListener("click", closeModal);
+      el.saveBtn.addEventListener("click", saveLine);
+      el.downloadJsonBtn.addEventListener("click", downloadJSON);
+
+      el.modal.addEventListener("click", (event) => {
+        if (event.target === el.modal) closeModal();
+      });
+
+      [
+        el.qty, el.baseSalary, el.allowance, el.overtime,
+        el.otherCost, el.govFees, el.insurance, el.markup, el.discount
+      ].forEach((input) => input.addEventListener("input", updateSummary));
+
+      el.tabs.addEventListener("click", (event) => {
+        const tab = event.target.dataset.tab;
+        if (!TAB_KEYS.includes(tab)) return;
+        currentTab = tab;
+        renderTabs();
+        renderCurrentTab();
+      });
+
+      el.configSearch.addEventListener("input", (event) => {
+        configSearch = event.target.value || "";
+        renderCurrentTab();
+      });
+
+      el.lineRows.addEventListener("click", (event) => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const index = Number(btn.dataset.index);
+        if (action === "edit") openEdit(index);
+        if (action === "delete") removeLine(index);
+      });
+
+      el.tabPanel.addEventListener("input", (event) => {
+        const target = event.target;
+        const idx = Number(target.dataset.idx);
+        const field = target.dataset.field;
+        if (!field || Number.isNaN(idx) || !configData[idx]) return;
+        if (target.type === "checkbox") {
+          configData[idx][field] = target.checked;
+        } else if (field === "GeneralSettingValue") {
+          configData[idx][field] = smartParse(target.value);
+        } else if (field === "TotalFeesValue") {
+          configData[idx][field] = smartParse(target.value);
+        } else if (field.includes("Team") || field === "QuotationMapTo") {
+          configData[idx][field] = target.value.trim() === "" ? null : target.value;
+        } else {
+          configData[idx][field] = target.value;
+        }
+        renderTabs();
+        updateSummary();
+      });
+    }
 
     renderTable();
+    attachEvents();
+    updateSummary();
+    loadConfigData();
   </script>
 </body>
 </html>
