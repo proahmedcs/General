@@ -204,6 +204,11 @@
       margin-bottom: 5px;
       font-weight: 700;
     }
+    label.required::after {
+      content: " *";
+      color: #c81e1e;
+      font-weight: 800;
+    }
 
     input, select, textarea {
       width: 100%;
@@ -243,6 +248,29 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+    }
+    .tools-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid #cedbf2;
+      background: #f7faff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #35507c;
+    }
+    .chip input {
+      width: auto;
+      margin: 0;
+      padding: 0;
     }
 
     .tabs {
@@ -312,20 +340,40 @@
       padding: 2px 8px;
     }
 
-    .param-row {
-      padding: 10px;
+    details.param-row {
       border-bottom: 1px solid #e9eff8;
       background: #fff;
     }
-    .param-row:last-child { border-bottom: 0; }
+    details.param-row:last-child { border-bottom: 0; }
     .param-title {
-      margin-bottom: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 9px 10px;
       font-size: 12px;
       color: #30465f;
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       align-items: center;
+      cursor: pointer;
+      background: #fcfeff;
+    }
+    .param-title::-webkit-details-marker {
+      display: none;
+    }
+    .param-title::before {
+      content: "▸";
+      font-size: 11px;
+      color: #486692;
+      font-weight: 900;
+      margin-right: 2px;
+      transform: translateY(-1px);
+    }
+    details[open] > .param-title::before {
+      content: "▾";
+    }
+    .param-body {
+      padding: 0 10px 10px;
     }
     .param-title .idx {
       background: #edf2fb;
@@ -337,8 +385,72 @@
     }
     .param-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
       gap: 8px;
+      justify-content: start;
+    }
+    .param-grid .wide {
+      grid-column: span 2;
+      max-width: 448px;
+    }
+    .param-grid .formula input {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+    }
+    .field-inline {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .info-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #bfd1ee;
+      border-radius: 999px;
+      background: #eef5ff;
+      color: #1f4ea2;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      flex: 0 0 auto;
+      line-height: 1;
+    }
+    .info-btn:hover {
+      background: #dfeeff;
+      border-color: #99b7eb;
+    }
+    .param-grid .numeric input {
+      max-width: 150px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .param-grid .guid input {
+      font-size: 12px;
+      max-width: 220px;
+    }
+    .hint {
+      margin-top: 4px;
+      color: #6d7f95;
+      font-size: 11px;
+      line-height: 1.25;
+    }
+    .warn {
+      border: 1px solid #fecaca;
+      background: #fff5f5;
+      color: #9f1239;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .ok {
+      border: 1px solid #b7ebca;
+      background: #eefcf3;
+      color: #196b41;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
     }
     .check {
       display: flex;
@@ -438,13 +550,14 @@
         <div class="top-grid">
           <section class="card">
             <h3>Basic Info</h3>
+            <div id="mandatoryBanner" class="ok">Ready to save. Mandatory fields are complete.</div>
             <div class="form-grid">
               <div>
-                <label for="role">Role / Position</label>
+                <label for="role" class="required">Role / Position</label>
                 <input id="role" required />
               </div>
               <div>
-                <label for="nationality">Nationality</label>
+                <label for="nationality" class="required">Nationality</label>
                 <select id="nationality">
                   <option>SAU</option>
                   <option>IND</option>
@@ -454,11 +567,11 @@
                 </select>
               </div>
               <div>
-                <label for="qty">Quantity</label>
+                <label for="qty" class="required">Quantity</label>
                 <input id="qty" type="number" min="1" value="1" />
               </div>
               <div>
-                <label for="contractType">Contract Type</label>
+                <label for="contractType" class="required">Contract Type</label>
                 <select id="contractType">
                   <option>Monthly</option>
                   <option>Yearly</option>
@@ -474,12 +587,12 @@
                 <input id="projectName" value="Master Client" />
               </div>
               <div>
-                <label for="baseSalary">Base Salary</label>
-                <input id="baseSalary" type="number" step="0.01" value="5000" />
+                <label for="baseSalary" class="required">Base Salary</label>
+                <input id="baseSalary" class="is-mandatory-phl" type="number" step="0.01" value="5000" />
               </div>
               <div>
-                <label for="allowance">Allowance</label>
-                <input id="allowance" type="number" step="0.01" value="500" />
+                <label for="allowance" class="required">Allowance</label>
+                <input id="allowance" class="is-mandatory-phl" type="number" step="0.01" value="500" />
               </div>
               <div>
                 <label for="overtime">Overtime</label>
@@ -491,11 +604,11 @@
               </div>
               <div>
                 <label for="govFees">Gov. Fees</label>
-                <input id="govFees" type="number" step="0.01" value="200" />
+                <input id="govFees" class="is-mandatory-phl" type="number" step="0.01" value="200" />
               </div>
               <div>
                 <label for="insurance">Insurance</label>
-                <input id="insurance" type="number" step="0.01" value="150" />
+                <input id="insurance" class="is-mandatory-phl" type="number" step="0.01" value="150" />
               </div>
               <div>
                 <label for="markup">Markup (%)</label>
@@ -524,8 +637,12 @@
 
         <section class="section-head">
           <div class="tabs" id="tabs"></div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; min-width:280px;">
+          <div class="tools-row" style="min-width:280px;">
             <input id="configSearch" type="text" placeholder="Search fields in current tab..." />
+            <label class="chip"><input id="compactModeToggle" type="checkbox" checked /> Compact fields</label>
+            <label class="chip"><input id="philippinesRuleToggle" type="checkbox" checked /> PH mandatory rules</label>
+            <button id="expandAllBtn" class="btn soft" type="button">Expand all</button>
+            <button id="collapseAllBtn" class="btn soft" type="button">Collapse all</button>
             <button id="downloadJsonBtn" class="btn soft" type="button">Download JSON</button>
           </div>
         </section>
@@ -794,10 +911,10 @@
       renderTable();
     }
 
-    function filterBySearch(items, tabKey) {
+    function filterEntriesBySearch(entries, tabKey) {
       const needle = configSearch.trim().toLowerCase();
-      if (!needle) return items;
-      return items.filter((item) => {
+      if (!needle) return entries;
+      return entries.filter(({ item }) => {
         if (tabKey === "quotation") {
           const text = [
             item.QuotationName,
@@ -828,6 +945,54 @@
         }
         return JSON.stringify(item).toLowerCase().includes(needle);
       });
+    }
+
+    function hydratePanelValues() {
+      const controls = el.tabPanel.querySelectorAll("[data-idx][data-field]");
+      controls.forEach((control) => {
+        const idx = Number(control.dataset.idx);
+        const field = control.dataset.field;
+        if (Number.isNaN(idx) || !field || !configData[idx]) return;
+        const value = configData[idx][field];
+        if (control.type === "checkbox") {
+          control.checked = Boolean(value);
+        } else {
+          control.value = value === null || value === undefined ? "" : String(value);
+        }
+      });
+    }
+
+    function estimateFormulaResult(formula) {
+      const text = String(formula || "").trim();
+      if (!text) return null;
+      const expression = text.startsWith("=") ? text.slice(1) : text;
+      const safe = expression.replaceAll(/\s+/g, "");
+      if (!/^[0-9+\-*/().]+$/.test(safe)) return null;
+      try {
+        const result = Function(`"use strict"; return (${safe});`)();
+        return Number.isFinite(result) ? result : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function showFormulaInfo(idx) {
+      const row = configData[idx];
+      if (!row) return;
+      const formula = String(row.QuotationValue || "");
+      const result = estimateFormulaResult(formula);
+      const message = [
+        `Equation: ${formula || "(empty)"}`,
+        "",
+        result === null
+          ? "Result: dynamic (depends on referenced cells/variables)."
+          : `Result: ${result}`,
+        "",
+        "How result is computed:",
+        "- If equation has only numbers/operators, result is calculated now.",
+        "- If equation references cells (e.g. F2, D10), final value is resolved by your upcoming calculation engine."
+      ].join("\n");
+      alert(message);
     }
 
     function renderTabs() {
@@ -872,54 +1037,70 @@
 
     function quotationRow(item, idx) {
       return `
-        <div class="param-row">
-          <div class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.QuotationName || "(Unnamed quotation)")}</strong></div>
+        <details class="param-row">
+          <summary class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.QuotationName || "(Unnamed quotation)")}</strong></summary>
+          <div class="param-body">
           <div class="param-grid">
-            <div><label>Quotation Name</label><input data-idx="${idx}" data-field="QuotationName" value="${esc(item.QuotationName)}" /></div>
-            <div><label>Quotation Value (Formula)</label><input data-idx="${idx}" data-field="QuotationValue" value="${esc(item.QuotationValue)}" /></div>
-            <div><label>Map To</label><input data-idx="${idx}" data-field="QuotationMapTo" value="${esc(item.QuotationMapTo ?? "")}" placeholder="new_fieldname" /></div>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsEnabled" ${item.QuotationIsEnabled ? "checked" : ""} /><span>Enabled</span></label>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsVisible" ${item.QuotationIsVisible ? "checked" : ""} /><span>Visible</span></label>
-            <div><label>Enabled For Team</label><input data-idx="${idx}" data-field="QuotationEnabledForTeam" value="${esc(item.QuotationEnabledForTeam ?? "")}" placeholder="team guid" /></div>
-            <div><label>Visible For Team</label><input data-idx="${idx}" data-field="QuotationVisibleForTeam" value="${esc(item.QuotationVisibleForTeam ?? "")}" placeholder="team guid" /></div>
+            <div><label>Quotation Name</label><input data-idx="${idx}" data-field="QuotationName" /></div>
+            <div class="wide formula">
+              <label>Quotation Value (Formula / Number)</label>
+              <div class="field-inline">
+                <input data-idx="${idx}" data-field="QuotationValue" />
+                <button type="button" class="info-btn" data-action="formula-info" data-idx="${idx}" title="Show equation and result">i</button>
+              </div>
+              <div class="hint">Click <strong>i</strong> to inspect equation and see computed result when possible.</div>
+            </div>
+            <div><label>Map To</label><input data-idx="${idx}" data-field="QuotationMapTo" placeholder="new_fieldname" /></div>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsEnabled" /><span>Enabled</span></label>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsVisible" /><span>Visible</span></label>
+            <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="QuotationEnabledForTeam" placeholder="team guid" /></div>
+            <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="QuotationVisibleForTeam" placeholder="team guid" /></div>
           </div>
-        </div>
+          </div>
+        </details>
       `;
     }
 
     function feesRow(item, idx) {
       return `
-        <div class="param-row">
-          <div class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.TotalFeesName || "(No TotalFeesName)")}</strong><span>- ${esc(item.QuotationName)}</span></div>
+        <details class="param-row">
+          <summary class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.TotalFeesName || "(No TotalFeesName)")}</strong><span>- ${esc(item.QuotationName)}</span></summary>
+          <div class="param-body">
           <div class="param-grid">
-            <div><label>Total Fees Name</label><input data-idx="${idx}" data-field="TotalFeesName" value="${esc(item.TotalFeesName)}" /></div>
-            <div><label>Total Fees Value</label><input data-idx="${idx}" data-field="TotalFeesValue" value="${esc(item.TotalFeesValue)}" /></div>
+            <div><label>Total Fees Name</label><input data-idx="${idx}" data-field="TotalFeesName" /></div>
+            <div class="numeric"><label>Total Fees Value</label><input data-idx="${idx}" data-field="TotalFeesValue" /></div>
             <div><label>Related Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsEnabled" ${item.TotalFeesIsEnabled ? "checked" : ""} /><span>Enabled</span></label>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsVisible" ${item.TotalFeesIsVisible ? "checked" : ""} /><span>Visible</span></label>
-            <div><label>Enabled For Team</label><input data-idx="${idx}" data-field="TotalFeesEnabledForTeam" value="${esc(item.TotalFeesEnabledForTeam ?? "")}" placeholder="team guid" /></div>
-            <div><label>Visible For Team</label><input data-idx="${idx}" data-field="TotalFeesVisibleForTeam" value="${esc(item.TotalFeesVisibleForTeam ?? "")}" placeholder="team guid" /></div>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsEnabled" /><span>Enabled</span></label>
+            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsVisible" /><span>Visible</span></label>
+            <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="TotalFeesEnabledForTeam" placeholder="team guid" /></div>
+            <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="TotalFeesVisibleForTeam" placeholder="team guid" /></div>
           </div>
-        </div>
+          </div>
+        </details>
       `;
     }
 
     function settingsRow(item, idx) {
       return `
-        <div class="param-row">
-          <div class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.GeneralSettingName || "(No setting name)")}</strong><span>- ${esc(item.QuotationName)}</span></div>
+        <details class="param-row">
+          <summary class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.GeneralSettingName || "(No setting name)")}</strong><span>- ${esc(item.QuotationName)}</span></summary>
+          <div class="param-body">
           <div class="param-grid">
-            <div><label>General Setting Name</label><input data-idx="${idx}" data-field="GeneralSettingName" value="${esc(item.GeneralSettingName)}" /></div>
-            <div><label>General Setting Value</label><input data-idx="${idx}" data-field="GeneralSettingValue" value="${esc(item.GeneralSettingValue)}" placeholder="number / text / true / false" /></div>
+            <div><label>General Setting Name</label><input data-idx="${idx}" data-field="GeneralSettingName" /></div>
+            <div class="wide"><label>General Setting Value</label><input data-idx="${idx}" data-field="GeneralSettingValue" placeholder="number / text / true / false" /></div>
             <div><label>Linked Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
           </div>
-        </div>
+          </div>
+        </details>
       `;
     }
 
     function renderCurrentTab() {
       if (currentTab === "raw") {
-        const filtered = filterBySearch(configData, "raw");
+        const filtered = filterEntriesBySearch(
+          configData.map((item, idx) => ({ item, idx })),
+          "raw"
+        ).map((x) => x.item);
         el.tabPanel.innerHTML = `
           <div class="group-head" style="border-radius: 10px;">
             <span>Raw JSON preview</span><span class="pill">${filtered.length} records</span>
@@ -935,44 +1116,44 @@
       }
 
       if (currentTab === "quotation") {
-        const filtered = filterBySearch(configData, "quotation");
-        const mapped = filtered
-          .map((item, idx) => ({ item, idx }))
-          .filter((x) => String(x.item.QuotationMapTo || "").trim());
-        const unmapped = filtered
-          .map((item, idx) => ({ item, idx }))
-          .filter((x) => !String(x.item.QuotationMapTo || "").trim());
+        const filtered = filterEntriesBySearch(
+          configData.map((item, idx) => ({ item, idx })),
+          "quotation"
+        );
+        const mapped = filtered.filter((x) => String(x.item.QuotationMapTo || "").trim());
+        const unmapped = filtered.filter((x) => !String(x.item.QuotationMapTo || "").trim());
         el.tabPanel.innerHTML =
           renderGroup("Mapped Quotation Fields", mapped, ({ item, idx }) => quotationRow(item, idx)) +
           renderGroup("Unmapped Quotation Fields", unmapped, ({ item, idx }) => quotationRow(item, idx));
+        hydratePanelValues();
         return;
       }
 
       if (currentTab === "fees") {
-        const filtered = filterBySearch(configData, "fees");
-        const configured = filtered
-          .map((item, idx) => ({ item, idx }))
-          .filter((x) => String(x.item.TotalFeesName || "").trim());
-        const emptyFees = filtered
-          .map((item, idx) => ({ item, idx }))
-          .filter((x) => !String(x.item.TotalFeesName || "").trim());
+        const filtered = filterEntriesBySearch(
+          configData.map((item, idx) => ({ item, idx })),
+          "fees"
+        );
+        const configured = filtered.filter((x) => String(x.item.TotalFeesName || "").trim());
+        const emptyFees = filtered.filter((x) => !String(x.item.TotalFeesName || "").trim());
         el.tabPanel.innerHTML =
           renderGroup("Configured Total Fees", configured, ({ item, idx }) => feesRow(item, idx)) +
           renderGroup("Without Total Fees Name", emptyFees, ({ item, idx }) => feesRow(item, idx));
+        hydratePanelValues();
         return;
       }
 
       if (currentTab === "settings") {
-        const filtered = filterBySearch(configData, "settings");
-        const configured = filtered
-          .map((item, idx) => ({ item, idx }))
-          .filter((x) => String(x.item.GeneralSettingName || "").trim());
-        const emptySettings = filtered
-          .map((item, idx) => ({ item, idx }))
-          .filter((x) => !String(x.item.GeneralSettingName || "").trim());
+        const filtered = filterEntriesBySearch(
+          configData.map((item, idx) => ({ item, idx })),
+          "settings"
+        );
+        const configured = filtered.filter((x) => String(x.item.GeneralSettingName || "").trim());
+        const emptySettings = filtered.filter((x) => !String(x.item.GeneralSettingName || "").trim());
         el.tabPanel.innerHTML =
           renderGroup("Configured General Settings", configured, ({ item, idx }) => settingsRow(item, idx)) +
           renderGroup("Without General Setting Name", emptySettings, ({ item, idx }) => settingsRow(item, idx));
+        hydratePanelValues();
         return;
       }
 
@@ -1047,6 +1228,14 @@
         }
         renderTabs();
         updateSummary();
+      });
+
+      el.tabPanel.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action='formula-info']");
+        if (!button) return;
+        const idx = Number(button.dataset.idx);
+        if (Number.isNaN(idx)) return;
+        showFormulaInfo(idx);
       });
     }
 
