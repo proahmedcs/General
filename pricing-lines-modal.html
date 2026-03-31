@@ -503,6 +503,26 @@
       text-align: right;
       font-variant-numeric: tabular-nums;
     }
+    .formula-read {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid #ccd7e8;
+      border-radius: 9px;
+      padding: 6px 7px;
+      background: #fff;
+      min-height: 34px;
+    }
+    .formula-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      color: #1a325d;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .param-grid .numeric input {
       max-width: 150px;
       text-align: right;
@@ -511,6 +531,38 @@
     .param-grid .guid input {
       font-size: 12px;
       max-width: 220px;
+    }
+    .flat-row {
+      border-bottom: 1px solid #e9eff8;
+      background: #fff;
+      padding: 10px;
+    }
+    .flat-row:last-child {
+      border-bottom: 0;
+    }
+    .flat-row .param-title {
+      cursor: default;
+      padding: 0 0 8px;
+      background: transparent;
+    }
+    .flat-row .param-title::before {
+      content: "";
+      display: none;
+    }
+    .flat-row .param-body {
+      padding: 0;
+    }
+    .quote-grid {
+      display: grid;
+      grid-template-columns: minmax(190px, 240px) minmax(260px, 1fr) minmax(190px, 240px);
+      gap: 10px;
+      align-items: start;
+    }
+    .quote-grid .formula {
+      min-width: 0;
+    }
+    .quote-grid .formula input {
+      width: 100%;
     }
     .hint {
       margin-top: 4px;
@@ -579,6 +631,9 @@
     @media (max-width: 1100px) {
       .top-grid { grid-template-columns: 1fr; }
       .form-grid, .param-grid { grid-template-columns: 1fr 1fr; }
+      .quote-grid {
+        grid-template-columns: 1fr;
+      }
     }
     @media (max-width: 720px) {
       .form-grid, .param-grid { grid-template-columns: 1fr; }
@@ -741,6 +796,16 @@
     </div>
   </div>
 
+  <div id="equationOverlay" class="info-overlay">
+    <div class="info-card">
+      <div class="info-head">
+        <h4 id="equationTitle">Equation Details</h4>
+        <button id="equationCloseBtn" class="btn soft" type="button">Close</button>
+      </div>
+      <div id="equationContent" class="info-body"></div>
+    </div>
+  </div>
+
   <script>
     const VAT_RATE = 0.15;
     const DATASET_URL = "./quotation-fees-and-settings.json";
@@ -789,7 +854,11 @@
       govFees: document.getElementById("govFees"),
       insurance: document.getElementById("insurance"),
       markup: document.getElementById("markup"),
-      discount: document.getElementById("discount")
+      discount: document.getElementById("discount"),
+      equationOverlay: document.getElementById("equationOverlay"),
+      equationCloseBtn: document.getElementById("equationCloseBtn"),
+      equationTitle: document.getElementById("equationTitle"),
+      equationContent: document.getElementById("equationContent")
     };
 
     function toSAR(value) {
@@ -914,6 +983,7 @@
 
     function closeModal() {
       el.modal.classList.remove("show");
+      closeEquationPopup();
       editIndex = null;
       configSearch = "";
       el.configSearch.value = "";
@@ -1060,23 +1130,105 @@
       }
     }
 
+    function normalizeFormulaDisplay(rawFormula) {
+      const text = String(rawFormula || "").trim();
+      if (!text) return "(empty)";
+      return text;
+    }
+
+    function extractReferences(formulaText) {
+      const refs = String(formulaText || "").match(/[A-Za-z]+\d+/g);
+      return refs ? Array.from(new Set(refs)) : [];
+    }
+
+    function parseMapPairs(text) {
+      const source = String(text || "").trim();
+      if (!source.includes(":")) return [];
+      const chunks = source.split(/[\n;,]+/).map((x) => x.trim()).filter(Boolean);
+      return chunks
+        .map((part) => {
+          const sep = part.indexOf(":");
+          if (sep === -1) return null;
+          const key = part.slice(0, sep).trim();
+          const value = part.slice(sep + 1).trim();
+          if (!key || !value) return null;
+          return { key, value };
+        })
+        .filter(Boolean);
+    }
+
+    function closeEquationPopup() {
+      if (!el.equationOverlay) return;
+      el.equationOverlay.classList.remove("show");
+    }
+
+    function openEquationPopup(title, html) {
+      if (!el.equationOverlay) return;
+      el.equationTitle.textContent = title;
+      el.equationContent.innerHTML = html;
+      el.equationOverlay.classList.add("show");
+    }
+
     function showFormulaInfo(idx) {
       const row = configData[idx];
       if (!row) return;
-      const formula = String(row.QuotationValue || "");
+      const formula = normalizeFormulaDisplay(row.QuotationValue);
       const result = estimateFormulaResult(formula);
-      const message = [
-        `Equation: ${formula || "(empty)"}`,
-        "",
-        result === null
-          ? "Result: dynamic (depends on referenced cells/variables)."
-          : `Result: ${result}`,
-        "",
-        "How result is computed:",
-        "- If equation has only numbers/operators, result is calculated now.",
-        "- If equation references cells (e.g. F2, D10), final value is resolved by your upcoming calculation engine."
-      ].join("\n");
-      alert(message);
+      const refs = extractReferences(formula);
+      const mappedPairs = parseMapPairs(formula);
+
+      const resultDisplay = result === null ? "Dynamic / resolved by engine" : String(result);
+      const refsDisplay = refs.length ? refs.join(", ") : "No direct cell references";
+      const steps = result !== null
+        ? [
+            "1) Remove '=' prefix if exists.",
+            "2) Evaluate arithmetic expression (+, -, *, /, parentheses).",
+            `3) Final result = ${resultDisplay}.`
+          ]
+        : [
+            "1) Read equation text exactly as configured.",
+            "2) Resolve each referenced field/cell in your JS calculation engine.",
+            "3) Apply formula operators/functions to get final result."
+          ];
+
+      const pairsHtml = mappedPairs.length
+        ? `
+          <div>
+            <div class="hint" style="margin-bottom:6px;">Parsed key:value pairs</div>
+            <div class="kv-list">
+              ${mappedPairs.map((pair) => `
+                <div class="kv-row">
+                  <div class="kv-key">${esc(pair.key)}</div>
+                  <div class="kv-val">${esc(pair.value)}</div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `
+        : "";
+
+      const html = `
+        <table class="info-table">
+          <tr><th>Quotation</th><td>${esc(row.QuotationName || "(Unnamed quotation)")}</td></tr>
+          <tr><th>Equation</th><td class="mono">${esc(formula)}</td></tr>
+          <tr><th>Current Result</th><td><strong>${esc(resultDisplay)}</strong></td></tr>
+          <tr><th>References</th><td>${esc(refsDisplay)}</td></tr>
+        </table>
+        ${pairsHtml}
+        <div>
+          <div class="hint" style="margin-bottom:6px;">How this is calculated</div>
+          <div class="kv-list">
+            ${steps.map((step, index) => `
+              <div class="kv-row">
+                <div class="kv-key">Step ${index + 1}</div>
+                <div class="kv-val" style="text-align:left; font-weight:600;">${esc(step)}</div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+
+      openEquationPopup(`Equation Details - ${row.QuotationName || "Quotation"}`, html);
     }
 
     function renderTabs() {
@@ -1132,7 +1284,7 @@
                 <input data-idx="${idx}" data-field="QuotationValue" />
                 <button type="button" class="info-btn" data-action="formula-info" data-idx="${idx}" title="Show equation and result">i</button>
               </div>
-              <div class="hint">Click <strong>i</strong> to inspect equation and see computed result when possible.</div>
+              <div class="hint">Click <strong>i</strong> to view equation details and calculation flow.</div>
             </div>
             <div><label>Map To</label><input data-idx="${idx}" data-field="QuotationMapTo" placeholder="new_fieldname" /></div>
             <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsEnabled" /><span>Enabled</span></label>
