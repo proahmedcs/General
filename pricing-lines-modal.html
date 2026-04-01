@@ -368,7 +368,19 @@ tbody tr.active td:first-child { padding-left: 16px; }
   font-weight: 700;
   font-size: 12px;
 }
-.input-with-symbol input { padding-left: 48px; font-family: var(--font-mono); }
+.input-with-symbol input {
+  width: 100%;
+  padding-left: 48px;
+  padding-right: 40px;
+  font-family: var(--font-mono);
+}
+.input-with-symbol .field-info-end {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
 
 .toggle-row {
   display: flex;
@@ -420,19 +432,12 @@ tbody tr.active td:first-child { padding-left: 16px; }
   letter-spacing: 0.02em;
 }
 .eq-inline .info-icon { font-size: 12px; font-weight: 800; line-height: 1; }
-.eq-inline-field {
-  min-width: 30px;
-  height: 18px;
-  padding: 0 5px;
-  margin-left: 6px;
-  vertical-align: text-top;
-}
 .eq-inline:hover { background: #DBEAFE; color: var(--accent-hover); }
-.eq-inline-field {
-  min-width: 28px;
-  height: 18px;
-  padding: 0 5px;
-  margin-left: 6px;
+.eq-inline-field-end {
+  min-width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 6px;
 }
 
 .modal-summary-sticky {
@@ -799,13 +804,13 @@ tbody tr.active td:first-child { padding-left: 16px; }
           </div>
           <div class="section-body">
             <div class="grid-2">
-              <div class="fg"><label>Markups Cost (Flat/mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_mar')" title="Show equation details" aria-label="Markups equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Markups equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-mar" value="200" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Operation Fees (Flat/mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_opr')" title="Show equation details" aria-label="Operation fees equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Operation fees equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-opr" value="280" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>G&A Cost (Total/mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_ga')" title="Show equation details" aria-label="G&A equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">G&A equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-ga" value="275" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Sales Commission (mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_com')" title="Show equation details" aria-label="Sales commission equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Sales commission equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-com" value="25" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Other Expenses/Credits <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_oth')" title="Show equation details" aria-label="Other expenses equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Other expenses equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-oth" value="-160.72" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Utilization Risk % <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_uti')" title="Show equation details" aria-label="Utilization risk equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Utilization risk equation details</span></button></label><div class="input-with-symbol"><span>%</span><input type="number" id="pr-uti" value="0" oninput="calcPreview()"></div></div>
-              <div class="fg" style="grid-column: span 2;"><label>Req. Discount Amount <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_dsc')" title="Show equation details" aria-label="Discount equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Discount equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-dsc" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Markups Cost (Flat/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-mar" value="200" oninput="calcPreview()"><button class="eq-inline eq-inline-field-end" onclick="showEqInfo('pr_mar')" title="Show equation details" aria-label="Markups equation details"><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Markups equation details</span></button></div></div>
+              <div class="fg"><label>Operation Fees (Flat/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-opr" value="280" oninput="calcPreview()"><button class="eq-inline eq-inline-field-end" onclick="showEqInfo('pr_opr')" title="Show equation details" aria-label="Operation fees equation details"><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Operation fees equation details</span></button></div></div>
+              <div class="fg"><label>G&A Cost (Total/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-ga" value="275" oninput="calcPreview()"><button class="eq-inline eq-inline-field-end" onclick="showEqInfo('pr_ga')" title="Show equation details" aria-label="G&A equation details"><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">G&A equation details</span></button></div></div>
+              <div class="fg"><label>Sales Commission (mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-com" value="25" oninput="calcPreview()"><button class="eq-inline eq-inline-field-end" onclick="showEqInfo('pr_com')" title="Show equation details" aria-label="Sales commission equation details"><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Sales commission equation details</span></button></div></div>
+              <div class="fg"><label>Other Expenses/Credits</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-oth" value="-160.72" oninput="calcPreview()"><button class="eq-inline eq-inline-field-end" onclick="showEqInfo('pr_oth')" title="Show equation details" aria-label="Other expenses equation details"><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Other expenses equation details</span></button></div></div>
+              <div class="fg"><label>Utilization Risk %</label><div class="input-with-symbol"><span>%</span><input type="number" id="pr-uti" value="0" oninput="calcPreview()"><button class="eq-inline eq-inline-field-end" onclick="showEqInfo('pr_uti')" title="Show equation details" aria-label="Utilization risk equation details"><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Utilization risk equation details</span></button></div></div>
+              <div class="fg" style="grid-column: span 2;"><label>Req. Discount Amount</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-dsc" value="0" oninput="calcPreview()"><button class="eq-inline eq-inline-field-end" onclick="showEqInfo('pr_dsc')" title="Show equation details" aria-label="Discount equation details"><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Discount equation details</span></button></div></div>
             </div>
           </div>
         </div>
