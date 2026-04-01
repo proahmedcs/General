@@ -570,6 +570,43 @@
       font-size: 11px;
       line-height: 1.25;
     }
+    .config-note {
+      margin-top: 6px;
+      color: #5f7392;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    details.inline-config {
+      margin-top: 8px;
+      border: 1px dashed #cddcf3;
+      border-radius: 10px;
+      background: #fbfdff;
+    }
+    details.inline-config > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #30507f;
+      user-select: none;
+    }
+    details.inline-config > summary::-webkit-details-marker {
+      display: none;
+    }
+    details.inline-config > summary::before {
+      content: "+";
+      display: inline-block;
+      width: 14px;
+      color: #4d6ea0;
+      font-weight: 900;
+    }
+    details.inline-config[open] > summary::before {
+      content: "-";
+    }
+    details.inline-config > .param-grid {
+      padding: 0 10px 10px;
+    }
     .warn {
       border: 1px solid #fecaca;
       background: #fff5f5;
@@ -784,6 +821,7 @@
             <button id="collapseAllBtn" class="btn soft" type="button">Collapse all</button>
             <button id="downloadJsonBtn" class="btn soft" type="button">Download JSON</button>
           </div>
+          <div class="config-note">Primary business fields are shown first. Remaining options are under <strong>Configuration</strong>.</div>
         </section>
 
         <section class="panel" id="tabPanel"></section>
@@ -1286,12 +1324,17 @@
               </div>
               <div class="hint">Click <strong>i</strong> to view equation details and calculation flow.</div>
             </div>
-            <div><label>Map To</label><input data-idx="${idx}" data-field="QuotationMapTo" placeholder="new_fieldname" /></div>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsEnabled" /><span>Enabled</span></label>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsVisible" /><span>Visible</span></label>
-            <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="QuotationEnabledForTeam" placeholder="team guid" /></div>
-            <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="QuotationVisibleForTeam" placeholder="team guid" /></div>
           </div>
+          <details class="inline-config">
+            <summary>Configuration</summary>
+            <div class="param-grid">
+              <div><label>Map To</label><input data-idx="${idx}" data-field="QuotationMapTo" placeholder="new_fieldname" /></div>
+              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsEnabled" /><span>Enabled</span></label>
+              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsVisible" /><span>Visible</span></label>
+              <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="QuotationEnabledForTeam" placeholder="team guid" /></div>
+              <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="QuotationVisibleForTeam" placeholder="team guid" /></div>
+            </div>
+          </details>
           </div>
         </details>
       `;
@@ -1305,12 +1348,17 @@
           <div class="param-grid">
             <div><label>Total Fees Name</label><input data-idx="${idx}" data-field="TotalFeesName" /></div>
             <div class="numeric"><label>Total Fees Value</label><input data-idx="${idx}" data-field="TotalFeesValue" /></div>
-            <div><label>Related Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsEnabled" /><span>Enabled</span></label>
-            <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsVisible" /><span>Visible</span></label>
-            <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="TotalFeesEnabledForTeam" placeholder="team guid" /></div>
-            <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="TotalFeesVisibleForTeam" placeholder="team guid" /></div>
           </div>
+          <details class="inline-config">
+            <summary>Configuration</summary>
+            <div class="param-grid">
+              <div><label>Related Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
+              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsEnabled" /><span>Enabled</span></label>
+              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsVisible" /><span>Visible</span></label>
+              <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="TotalFeesEnabledForTeam" placeholder="team guid" /></div>
+              <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="TotalFeesVisibleForTeam" placeholder="team guid" /></div>
+            </div>
+          </details>
           </div>
         </details>
       `;
@@ -1324,8 +1372,13 @@
           <div class="param-grid">
             <div><label>General Setting Name</label><input data-idx="${idx}" data-field="GeneralSettingName" /></div>
             <div class="wide"><label>General Setting Value</label><input data-idx="${idx}" data-field="GeneralSettingValue" placeholder="number / text / true / false" /></div>
-            <div><label>Linked Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
           </div>
+          <details class="inline-config">
+            <summary>Configuration</summary>
+            <div class="param-grid">
+              <div><label>Linked Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
+            </div>
+          </details>
           </div>
         </details>
       `;
