@@ -1,722 +1,1021 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing Lines - Modal UI</title>
-  <style>
-    :root {
-      --bg: #f3f6fb;
-      --card: #ffffff;
-      --text: #1c2434;
-      --muted: #667085;
-      --primary: #3b82f6;
-      --primary-dark: #1d4ed8;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --line: #e5e7eb;
-      --shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
-      --radius: 14px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workspace - Pricing Engine (Light)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-main: #F3F4F6;
+  --bg-panel: #FFFFFF;
+  --bg-header: #FFFFFF;
+  --bg-input: #F9FAFB;
+  --bg-hover: #F3F4F6;
+  --bg-active: #EFF6FF;
+  --border-color: #E5E7EB;
+  --border-focus: #93C5FD;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --text-light: #9CA3AF;
+  --accent: #2563EB;
+  --accent-hover: #1D4ED8;
+  --success: #059669;
+  --warning: #D97706;
+  --danger: #DC2626;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
 
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(180deg, #f7f9ff 0%, #eef3fb 100%);
-      color: var(--text);
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-    .app {
-      max-width: 1250px;
-      margin: 24px auto;
-      padding: 0 16px 24px;
-    }
+.top-bar {
+  height: 64px;
+  background: var(--bg-header);
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+.brand {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stats-bar { display: flex; gap: 12px; }
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: white;
+  padding: 6px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  min-width: 110px;
+  box-shadow: var(--shadow-sm);
+}
+.stat-lbl {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+.stat-val {
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--font-mono);
+}
+.s-green { color: var(--success); }
+.s-acc { color: var(--accent); }
 
-    .topbar {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px 18px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
+.client-bar { display: flex; gap: 12px; align-items: center; }
+.client-bar select {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 6px 32px 6px 12px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
 
-    .brand h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: .2px;
-    }
-    .brand small { color: var(--muted); }
+.workspace { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+.panel-left { flex: 1; display: flex; flex-direction: column; background: var(--bg-main); min-width: 300px; }
+.panel-toolbar {
+  height: 48px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+  background: var(--bg-panel);
+  flex-shrink: 0;
+}
+.panel-title {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.table-container { flex: 1; overflow: auto; background: var(--bg-panel); }
+table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+thead { position: sticky; top: 0; background: var(--bg-input); z-index: 2; box-shadow: 0 1px 0 var(--border-color); }
+th {
+  text-align: left;
+  padding: 12px 20px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+  font-size: 12px;
+}
+th.num, td.num { text-align: right; }
+td {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+td.num { font-family: var(--font-mono); font-weight: 500; }
+tbody tr { cursor: pointer; transition: background 0.15s; }
+tbody tr:hover { background: var(--bg-hover); }
+tbody tr.active { background: var(--bg-active); border-left: 4px solid var(--accent); }
+tbody tr.active td:first-child { padding-left: 16px; }
 
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg-panel); color: var(--text-main); border-color: var(--border-color); }
+.btn-secondary:hover { background: var(--bg-hover); }
+.btn-danger { background: #FEF2F2; color: var(--danger); border-color: #FECACA; }
+.btn-danger:hover { background: #FEE2E2; }
+.btn-success { background: #10B981; color: white; border: none; }
 
-    .btn {
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .2s ease;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-ghost {
-      background: #eef2ff;
-      color: #334155;
-    }
-    .btn-danger {
-      background: #fee2e2;
-      color: #991b1b;
-    }
+.footer-dash {
+  height: 100px;
+  background: white;
+  border-top: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 40px;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.02);
+  flex-shrink: 0;
+}
 
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
+/* Editor Modal - 80% */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay.show { display: flex; }
+.editor-modal {
+  width: 80vw;
+  height: 80vh;
+  min-width: 960px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.editor-head {
+  height: 56px;
+  background: linear-gradient(90deg, #2563EB, #4F46E5);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+.editor-head h2 { font-size: 16px; font-weight: 700; }
+.editor-close {
+  border: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    thead th {
-      text-align: left;
-      background: #f8fafc;
-      color: #475467;
-      font-size: 13px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--line);
-    }
-    tbody td {
-      padding: 12px 14px;
-      border-bottom: 1px solid #edf2f7;
-      font-size: 14px;
-    }
-    tbody tr:hover { background: #f9fbff; }
-    .money { font-weight: 700; color: #1f3f8f; }
-    .row-actions { display: flex; gap: 8px; }
+.editor-search-wrap {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: #fff;
+  flex-shrink: 0;
+  position: relative;
+}
+.editor-search {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
+}
+.search-icon {
+  position: absolute;
+  left: 28px;
+  top: 22px;
+  color: var(--text-light);
+  pointer-events: none;
+}
 
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      z-index: 1000;
-    }
-    .modal-overlay.show { display: flex; }
+.editor-body { flex: 1; display: grid; grid-template-columns: 1.2fr 0.8fr; min-height: 0; }
+.editor-form {
+  overflow-y: auto;
+  padding: 16px;
+}
+.editor-summary {
+  border-left: 1px solid var(--border-color);
+  background: #FAFBFF;
+  padding: 16px;
+  overflow-y: auto;
+}
+.section {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.section-header {
+  padding: 12px 14px;
+  background: var(--bg-input);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+.section.open .section-body { display: block; }
+.section-body { display: none; padding: 14px; }
+.section-icon { transition: transform .2s; }
+.section.open .section-icon { transform: rotate(180deg); }
 
-    .modal {
-      width: min(1100px, 100%);
-      max-height: 92vh;
-      overflow: auto;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 18px 45px rgba(2, 6, 23, .4);
-      border: 1px solid #e6ebf4;
-    }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fg { display: flex; flex-direction: column; gap: 6px; }
+.fg label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+.fg input, .fg select {
+  border: 1px solid var(--border-color);
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.fg input:focus, .fg select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+.input-with-symbol { position: relative; display: flex; align-items: center; }
+.input-with-symbol span {
+  position: absolute;
+  left: 12px;
+  color: var(--text-light);
+  font-weight: 700;
+  font-size: 12px;
+}
+.input-with-symbol input { padding-left: 48px; font-family: var(--font-mono); }
 
-    .modal-head {
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background: linear-gradient(90deg, #2563eb, #4f46e5);
-      color: #fff;
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .modal-head h2 { margin: 0; font-size: 18px; }
-    .close-x {
-      border: 0;
-      background: rgba(255,255,255,.18);
-      color: #fff;
-      border-radius: 8px;
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
-      font-size: 18px;
-    }
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px 12px;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+.toggle-row input { width: 16px; height: 16px; }
 
-    .modal-body {
-      display: grid;
-      grid-template-columns: 1.3fr .7fr;
-      gap: 16px;
-      padding: 16px;
-    }
+.summary-card {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: white;
+  overflow: hidden;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px dashed var(--border-color);
+  font-size: 13px;
+}
+.summary-row:last-child { border-bottom: 0; }
+.summary-row strong { font-family: var(--font-mono); }
+.eq-inline {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 6px;
+}
+.eq-inline:hover { color: var(--accent-hover); }
 
-    .group {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-      background: #fcfdff;
-    }
-    .group h3 {
-      margin: 0 0 10px;
-      font-size: 14px;
-      color: #111827;
-    }
+.editor-foot {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  background: #fff;
+  flex-shrink: 0;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(160px, 1fr));
-      gap: 10px;
-    }
+/* Equation info modal */
+.info-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+.info-overlay.show { display: flex; }
+.info-modal {
+  width: min(720px, 92vw);
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.22);
+}
+.info-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  background: #F8FAFF;
+}
+.info-body { padding: 14px; }
+.info-table { width: 100%; border-collapse: collapse; }
+.info-table th, .info-table td {
+  border: 1px solid var(--border-color);
+  padding: 8px 10px;
+  text-align: left;
+}
+.info-table th { width: 180px; background: #F9FAFB; color: var(--text-muted); font-weight: 600; }
+.mono { font-family: var(--font-mono); }
 
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #475467;
-      margin-bottom: 6px;
-    }
-    input, select {
-      width: 100%;
-      border: 1px solid #d0d7e4;
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 14px;
-      outline: none;
-      background: #fff;
-    }
-    input:focus, select:focus {
-      border-color: #7da7ff;
-      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
-    }
+.highlight-match {
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.18);
+  border-radius: 8px;
+}
 
-    .toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-      font-size: 13px;
-      color: #334155;
-    }
-
-    .summary {
-      position: sticky;
-      top: 76px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px;
-      height: fit-content;
-      background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
-    }
-    .summary h3 { margin: 0 0 10px; }
-    .metric {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px dashed #c9d5ee;
-      padding: 8px 0;
-      font-size: 14px;
-    }
-    .metric strong { color: #0f172a; }
-
-    .modal-foot {
-      position: sticky;
-      bottom: 0;
-      z-index: 5;
-      background: #fff;
-      border-top: 1px solid var(--line);
-      padding: 12px 16px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .formula-inline {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .icon-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      border: 1px solid #bfd1ee;
-      background: #eef5ff;
-      color: #1f4ea2;
-      font-weight: 800;
-      cursor: pointer;
-      flex: 0 0 auto;
-    }
-    .icon-btn:hover {
-      background: #dfeeff;
-      border-color: #99b7eb;
-    }
-
-    .info-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      z-index: 1200;
-    }
-    .info-overlay.show { display: flex; }
-    .info-card {
-      width: min(760px, 100%);
-      max-height: 86vh;
-      overflow: auto;
-      background: #fff;
-      border-radius: 14px;
-      border: 1px solid #d9e4f5;
-      box-shadow: 0 18px 45px rgba(2, 6, 23, .32);
-    }
-    .info-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      border-bottom: 1px solid #e6ecf7;
-      background: #f5f9ff;
-    }
-    .info-head h3 {
-      margin: 0;
-      font-size: 14px;
-      color: #183b75;
-    }
-    .info-body {
-      padding: 12px 14px;
-      display: grid;
-      gap: 10px;
-    }
-    .info-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-    .info-table th, .info-table td {
-      border: 1px solid #e1e9f7;
-      padding: 7px 8px;
-      text-align: left;
-      vertical-align: top;
-    }
-    .info-table th {
-      width: 170px;
-      background: #f7fbff;
-      color: #2b4a78;
-    }
-    .mono {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-    }
-
-    @media (max-width: 980px) {
-      .modal-body { grid-template-columns: 1fr; }
-      .summary { position: static; }
-      .grid { grid-template-columns: 1fr; }
-      table { font-size: 13px; }
-    }
-  </style>
+@media (max-width: 1200px) {
+  .editor-modal { min-width: 92vw; width: 92vw; height: 88vh; }
+  .editor-body { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="brand">
-        <h1>Pricing Engine - Costing Lines</h1>
-        <small>Organized line management with grouped modal editor</small>
-      </div>
-      <div class="actions">
-        <button class="btn btn-ghost">Export CSV</button>
-        <button id="addLineBtn" class="btn btn-primary">+ Add New Line</button>
+<div class="top-bar">
+  <div class="brand">
+    <div style="background:var(--accent); color:white; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:6px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    Pricing Engine <span style="color:var(--text-light); font-weight:500;">/ Workspace</span>
+  </div>
+  <div class="client-bar">
+    <span style="color:var(--text-muted); font-size:12px; font-weight:600; text-transform:uppercase;">Master Client:</span>
+    <select id="global-client">
+      <option>Aramco</option>
+      <option>SABIC</option>
+      <option>Berry Tower For Juices</option>
+      <option>Mobily</option>
+    </select>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-lbl">Headcount</span><span class="stat-val" id="st-qty">0</span></div>
+    <div class="stat-item"><span class="stat-lbl">Lines</span><span class="stat-val s-acc" id="st-lines">0</span></div>
+    <div class="stat-item"><span class="stat-lbl">Proj. Svc Price</span><span class="stat-val s-acc" id="st-svc">0.00</span></div>
+    <div class="stat-item"><span class="stat-lbl">Proj. VAT (15%)</span><span class="stat-val" id="st-vat" style="color:var(--warning)">0.00</span></div>
+    <div class="stat-item"><span class="stat-lbl">Project GP</span><span class="stat-val" id="st-mar" style="color:#B91C1C">0.00</span></div>
+    <div class="stat-item"><span class="stat-lbl">Total Project (Net+Vat)</span><span class="stat-val s-green" id="st-bill">0.00</span></div>
+  </div>
+</div>
+
+<div class="workspace">
+  <div class="panel-left">
+    <div class="panel-toolbar">
+      <div class="panel-title">Costing Lines Data</div>
+      <div style="display:flex; gap:8px; margin-left:auto;">
+        <button class="btn btn-danger" style="padding: 6px 12px; font-size:12px;" onclick="clearWorkspace()">Clear</button>
+        <button class="btn btn-success" style="padding: 6px 12px; font-size:12px;" onclick="exportCSV()">Export CSV</button>
+        <button class="btn btn-primary" style="padding: 6px 12px; font-size:12px;" onclick="prepareNew()">New Line</button>
       </div>
     </div>
-
-    <div class="panel">
-      <table id="linesTable">
+    <div class="table-container">
+      <table>
         <thead>
           <tr>
-            <th>#</th>
+            <th style="width:40px;">#</th>
             <th>Role / Position</th>
             <th>Nationality</th>
-            <th>Qty</th>
-            <th>Service Price</th>
-            <th>VAT (15%)</th>
-            <th>Net + VAT</th>
-            <th>Actions</th>
+            <th class="num">Qty</th>
+            <th class="num">Svc Price</th>
+            <th class="num">VAT (15%)</th>
+            <th class="num">Net + VAT</th>
+            <th class="num">Total Rev.</th>
           </tr>
         </thead>
-        <tbody id="lineRows"></tbody>
+        <tbody id="line-body"></tbody>
+        <tfoot id="line-foot" style="position: sticky; bottom: 0; background: #F9FAFB; border-top: 2px solid var(--border-color); font-weight: 700;">
+          <tr>
+            <td colspan="3" style="padding: 10px 16px; text-align: right; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; color: var(--text-muted);">Grand Totals</td>
+            <td class="num" id="f-qty" style="color: var(--accent);">0</td>
+            <td class="num">-</td>
+            <td class="num" id="f-vat">0.00</td>
+            <td class="num" id="f-nvat" style="color: var(--success);">0.00</td>
+            <td class="num" id="f-rev" style="color: var(--success);">0.00</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
-  </div>
 
-  <div id="modalOverlay" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-head">
-        <h2 id="modalTitle">Add New Line</h2>
-        <button class="close-x" id="closeModalBtn">&times;</button>
+    <div class="footer-dash">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Selected Line Pricing</div>
+        <div style="font-size:13px; font-weight:700;" id="dash-role-name">Drafting mode...</div>
       </div>
-
-      <div class="modal-body">
-        <form id="lineForm">
-          <div class="group">
-            <h3>1) Basic Details</h3>
-            <div class="grid">
-              <div>
-                <label>Role / Position</label>
-                <input id="role" required />
-              </div>
-              <div>
-                <label>Nationality</label>
-                <select id="nationality">
-                  <option>SAU</option><option>IND</option><option>EGY</option><option>PAK</option><option>PHL</option>
-                </select>
-              </div>
-              <div>
-                <label>Quantity</label>
-                <input id="qty" type="number" min="1" value="1" />
-              </div>
-              <div>
-                <label>Contract Type</label>
-                <select id="contractType">
-                  <option>Monthly</option>
-                  <option>Yearly</option>
-                  <option>Project Based</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>2) Compensation &amp; Allowances</h3>
-            <div class="grid">
-              <div>
-                <label>Base Salary</label>
-                <input id="baseSalary" type="number" step="0.01" value="5000" />
-              </div>
-              <div>
-                <label>Allowance</label>
-                <input id="allowance" type="number" step="0.01" value="500" />
-              </div>
-              <div>
-                <label>Overtime</label>
-                <input id="overtime" type="number" step="0.01" value="0" />
-              </div>
-              <div>
-                <label>Other Cost</label>
-                <input id="otherCost" type="number" step="0.01" value="0" />
-              </div>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>3) Gov. &amp; Operational Fees</h3>
-            <div class="grid">
-              <div>
-                <label>Gov Fees</label>
-                <input id="govFees" type="number" step="0.01" value="200" />
-              </div>
-              <div>
-                <label>Insurance</label>
-                <input id="insurance" type="number" step="0.01" value="150" />
-              </div>
-            </div>
-            <div class="toggle-wrap">
-              <input id="familyStatus" type="checkbox" />
-              <label for="familyStatus" style="margin:0;">Enable Family Status</label>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>4) Quotation Scopes</h3>
-            <div class="grid">
-              <div class="toggle-wrap"><input id="scopeAjeer" type="checkbox" /> <label for="scopeAjeer" style="margin:0;">Ajeer Scope</label></div>
-              <div class="toggle-wrap"><input id="scopeVisa" type="checkbox" checked /> <label for="scopeVisa" style="margin:0;">Visa Scope</label></div>
-              <div class="toggle-wrap"><input id="scopeMedical" type="checkbox" checked /> <label for="scopeMedical" style="margin:0;">Medical Scope</label></div>
-              <div class="toggle-wrap"><input id="scopeTicket" type="checkbox" /> <label for="scopeTicket" style="margin:0;">Ticket Scope</label></div>
-            </div>
-          </div>
-
-          <div class="group">
-            <h3>5) Pricing Margins &amp; Overheads</h3>
-            <div class="grid">
-              <div>
-                <label>Markup (%)</label>
-                <input id="markup" type="number" step="0.01" value="12" />
-              </div>
-              <div>
-                <label>Discount (%)</label>
-                <input id="discount" type="number" step="0.01" value="0" />
-              </div>
-            </div>
-          </div>
-        </form>
-
-        <aside class="summary">
-          <h3>Live Summary</h3>
-          <div class="metric"><span>Service Price</span><strong id="sumService">SAR 0.00</strong></div>
-          <div class="metric"><span>VAT (15%)</span><strong id="sumVat">SAR 0.00</strong></div>
-          <div class="metric"><span>Net + VAT</span><strong id="sumNet">SAR 0.00</strong></div>
-          <div class="metric"><span>Total for Qty</span><strong id="sumTotal">SAR 0.00</strong></div>
-        </aside>
+      <div style="width:1px; height:40px; background:var(--border-color);"></div>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <span style="font-size:10px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Service Price</span>
+        <span style="font-weight:700; color:var(--accent); font-size:18px; font-family:var(--font-mono);" id="dash-svc">0.00</span>
       </div>
-
-      <div class="modal-foot">
-        <button class="btn btn-ghost" id="cancelBtn" type="button">Cancel</button>
-        <button class="btn btn-primary" id="saveBtn" type="button">Save Line</button>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <span style="font-size:10px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">VAT Amount (15%)</span>
+        <span style="font-weight:700; color:var(--warning); font-size:18px; font-family:var(--font-mono);" id="dash-vat">0.00</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:2px; background:var(--bg-active); padding:8px 16px; border-radius:8px; border:1px solid var(--border-focus);">
+        <span style="font-size:10px; color:var(--accent); text-transform:uppercase; font-weight:800;">Net + VAT (Final)</span>
+        <span style="font-weight:800; color:var(--accent); font-size:24px; font-family:var(--font-mono);" id="dash-total">0.00</span>
       </div>
     </div>
   </div>
+</div>
 
-  <div id="infoOverlay" class="info-overlay">
-    <div class="info-card">
-      <div class="info-head">
-        <h3 id="infoTitle">Equation Details</h3>
-        <button id="infoCloseBtn" class="btn btn-ghost" type="button">Close</button>
+<!-- 80% Editor Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="editor-modal">
+    <div class="editor-head">
+      <h2 id="form-title">Create New Line</h2>
+      <button class="editor-close" onclick="closeEditor()">&times;</button>
+    </div>
+    <div class="editor-search-wrap">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="field-search" class="editor-search" placeholder="Search for any field or setting..." oninput="searchFields()">
+    </div>
+    <div class="editor-body">
+      <div class="editor-form" id="form-content-area">
+        <div class="section open">
+          <div class="section-header" onclick="toggleAcc(this)">
+            <div>1. Role Specification</div>
+            <svg class="section-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="section-body">
+            <div class="grid-2">
+              <div class="fg"><label>Position Title *</label><input type="text" id="p-role" value="Cleanliness Worker" oninput="calcPreview()"></div>
+              <div class="fg"><label>Visa Profession</label><input type="text" id="p-vprof" value="Cleanliness Worker" oninput="calcPreview()"></div>
+              <div class="fg"><label>Profession Category</label><input type="text" id="p-pcat" value="" oninput="calcPreview()"></div>
+              <div class="fg"><label>Medical Degree</label><input type="text" id="p-mdeg" value="" oninput="calcPreview()"></div>
+              <div class="fg"><label>Nationality</label>
+                <select id="p-nat" onchange="calcPreview()">
+                  <option value="PHL">Philippines</option><option value="IND">India</option><option value="SAU">Saudi Arabia</option><option value="EGY">Egypt</option><option value="PAK">Pakistan</option>
+                </select>
+              </div>
+              <div class="fg"><label>Gender</label>
+                <select id="p-gen" onchange="calcPreview()"><option value="Male">Male</option><option value="Female">Female</option></select>
+              </div>
+              <div class="fg"><label>Quantity</label><input type="number" id="p-qty" min="1" value="1" oninput="calcPreview()"></div>
+              <div class="fg"><label>Contract (Months)</label><input type="number" id="p-con" min="1" value="24" oninput="calcPreview()"></div>
+              <div class="fg"><label>Annual Leave (Days)</label><input type="number" id="p-vac" min="1" value="21" oninput="calcPreview()"></div>
+              <div class="fg"><label>Req. Type</label><select id="p-req" onchange="calcPreview()"><option value="Overseas">Labor From Housing</option><option value="Local">Local Transfer</option></select></div>
+            </div>
+            <div style="margin-top: 10px;" class="toggle-row">
+              <input type="checkbox" id="p-fam" onchange="document.getElementById('fam-div').style.display=this.checked?'block':'none'; calcPreview();">
+              <label for="p-fam">Enable Family Status</label>
+            </div>
+            <div class="fg" id="fam-div" style="display:none; padding-top:8px;"><label>Number of Dependents</label><input type="number" id="p-dep" value="1" oninput="calcPreview()"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header" onclick="toggleAcc(this)">
+            <div>2. Compensation & Allowances</div>
+            <svg class="section-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="section-body">
+            <div class="grid-2">
+              <div class="fg"><label>Basic Salary *</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-bas" value="1500" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Housing Allowance</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-hou" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Transport Allowance</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-tra" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Food Allowance</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-foo" value="300" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Other Allowance</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-oth" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Danger Allowance</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-dng" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Infection Allow.</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-inf" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Remote Area Allow.</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-rem" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Nature of Work Allow.</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-nat" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Fixed OT</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="c-otf" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Normal OT 1.5 (hrs)</label><input type="number" id="c-ot1" value="26" oninput="calcPreview()"></div>
+              <div class="fg"><label>Normal OT 2.0 (hrs)</label><input type="number" id="c-ot2" value="0" oninput="calcPreview()"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header" onclick="toggleAcc(this)">
+            <div>3. Gov. & Operational Fees</div>
+            <svg class="section-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="section-body">
+            <div class="grid-2">
+              <div class="fg"><label>Insurance Category</label><select id="f-inscat" onchange="calcPreview()"><option value="VVIP">VVIP</option><option value="VIP">VIP</option><option value="A+">A+</option><option value="A">A</option><option value="A-">A-</option><option value="B+">B+</option><option value="B">B</option><option value="B-">B-</option><option value="C" selected>C</option><option value="C-">C-</option></select></div>
+              <div class="fg"><label>Med Ins. Override (yr)</label><input type="number" id="f-med" value="0" oninput="calcPreview()"></div>
+              <div class="fg"><label>Work Permit (yr)</label><input type="number" id="f-wp" value="9700" oninput="calcPreview()"></div>
+              <div class="fg"><label>Iqama (yr)</label><input type="number" id="f-iqa" value="650" oninput="calcPreview()"></div>
+              <div class="fg"><label>Ajeer (yr)</label><input type="number" id="f-aje" value="240" oninput="calcPreview()"></div>
+              <div class="fg"><label>Payroll Card (yr)</label><input type="number" id="f-pay" value="84" oninput="calcPreview()"></div>
+              <div class="fg"><label>Incoming Ticket (fix)</label><input type="number" id="f-mob" value="2000" oninput="calcPreview()"></div>
+              <div class="fg"><label>Exit Ticket (fix)</label><input type="number" id="f-rep" value="2000" oninput="calcPreview()"></div>
+              <div class="fg"><label>Vacation Ticket (fix)</label><input type="number" id="f-vac" value="2300" oninput="calcPreview()"></div>
+              <div class="fg"><label>Visa Fee (fix)</label><input type="number" id="f-vis" value="2000" oninput="calcPreview()"></div>
+              <div class="fg"><label>Recruit. Charges (USD)</label><input type="number" id="f-agc" value="800" oninput="calcPreview()"></div>
+              <div class="fg"><label>Med Checkup (fix)</label><input type="number" id="f-mdc" value="130" oninput="calcPreview()"></div>
+              <div class="fg"><label>Medical Quarantine</label><input type="number" id="f-mdq" value="0" oninput="calcPreview()"></div>
+              <div class="fg"><label>Driving Lic. (fix)</label><input type="number" id="f-drv" value="0" oninput="calcPreview()"></div>
+              <div class="fg"><label>Municipality Lic. (fix)</label><input type="number" id="f-mun" value="0" oninput="calcPreview()"></div>
+              <div class="fg"><label>Exit Re-entry (fix)</label><input type="number" id="f-exi" value="200" oninput="calcPreview()"></div>
+              <div class="fg"><label>E-Wakala / COC (fix)</label><input type="number" id="f-coc" value="50" oninput="calcPreview()"></div>
+              <div class="fg"><label>Runaway Insurance (yr)</label><input type="number" id="f-run" value="0" oninput="calcPreview()"></div>
+              <div class="fg"><label>Uniform (yr)</label><input type="number" id="f-uni" value="0" oninput="calcPreview()"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header" onclick="toggleAcc(this)">
+            <div>4. Quotation Scopes (Options)</div>
+            <svg class="section-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="section-body">
+            <div class="grid-2">
+              <div class="fg"><label>Candidate Sourcing</label><select id="t-src" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Recruitment Charges</label><select id="t-rec" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Visa Processing</label><select id="t-vis" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Incoming Ticket</label><select id="t-mob" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Accommodation</label><select id="t-hou" onchange="calcPreview()"><option value="client">Client Scope</option><option value="us">Recruit. Co Scope</option></select></div>
+              <div class="fg"><label>Transportation</label><select id="t-tra" onchange="calcPreview()"><option value="client">Client Scope</option><option value="us">Recruit. Co Scope</option></select></div>
+              <div class="fg"><label>Food</label><select id="t-foo" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Vacation Tickets</label><select id="t-vtc" onchange="calcPreview()"><option value="uso">Recruit. Co Scope Without Charge</option><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Exit Ticket</label><select id="t-rep" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Baladiya License</label><select id="t-mun" onchange="calcPreview()"><option value="client">Client Scope</option><option value="us">Recruit. Co Scope</option></select></div>
+              <div class="fg"><label>Med Checkup Scope</label><select id="t-mdc" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Exit Re-entry Scope</label><select id="t-exi" onchange="calcPreview()"><option value="us">Recruit. Co Scope</option><option value="client">Client Scope</option></select></div>
+              <div class="fg"><label>Idle Period per Day</label><input type="number" id="t-idl" value="1" oninput="calcPreview()"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header" onclick="toggleAcc(this)">
+            <div>5. Pricing Margins & Overheads</div>
+            <svg class="section-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="section-body">
+            <div class="grid-2">
+              <div class="fg"><label>Markups Cost (Flat/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-mar" value="200" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Operation Fees (Flat/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-opr" value="280" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>G&A Cost (Total/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-ga" value="275" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Sales Commission (mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-com" value="25" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Other Expenses/Credits</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-oth" value="-160.72" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Utilization Risk %</label><div class="input-with-symbol"><span>%</span><input type="number" id="pr-uti" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg" style="grid-column: span 2;"><label>Req. Discount Amount</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-dsc" value="0" oninput="calcPreview()"></div></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="infoBody" class="info-body"></div>
+
+      <aside class="editor-summary">
+        <h3 style="margin-bottom:10px;">Pricing Summary</h3>
+        <div class="summary-card">
+          <div class="summary-row">
+            <span>Service Price <button class="eq-inline" onclick="showEqInfo('svc')">i</button></span>
+            <strong id="res-svc">SAR 0.00</strong>
+          </div>
+          <div class="summary-row">
+            <span>Vat Amount (15%) <button class="eq-inline" onclick="showEqInfo('vat')">i</button></span>
+            <strong id="res-vat">SAR 0.00</strong>
+          </div>
+          <div class="summary-row">
+            <span>Net + VAT (Final) <button class="eq-inline" onclick="showEqInfo('total')">i</button></span>
+            <strong id="res-total">SAR 0.00</strong>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <div class="editor-foot">
+      <button class="btn btn-danger" id="btn-del" style="display:none;" onclick="applyDelete()">Delete</button>
+      <button class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
+      <button class="btn btn-primary" id="btn-save" onclick="saveLine()">Commit to Workspace</button>
     </div>
   </div>
+</div>
 
-  <script>
-    const VAT_RATE = 0.15;
-    const rowsEl = document.getElementById("lineRows");
-    const modal = document.getElementById("modalOverlay");
-    const modalTitle = document.getElementById("modalTitle");
+<!-- Equation details -->
+<div id="eqInfoModal" class="info-overlay">
+  <div class="info-modal">
+    <div class="info-head">
+      <h3 id="eqInfoTitle">Equation Details</h3>
+      <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeEqInfo()">Close</button>
+    </div>
+    <div class="info-body" id="eqInfoBody"></div>
+  </div>
+</div>
 
-    let editIndex = null;
-    let lines = [
-      { role: "Project Manager", nationality: "SAU", qty: 1, service: 12000 },
-      { role: "Maintenance Foreman", nationality: "IND", qty: 8, service: 6717.5 }
-    ];
+<script>
+const $ = id => document.getElementById(id);
+const v = id => parseFloat($(id).value) || 0;
+const fmt = n => n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-    const fields = {
-      role: document.getElementById("role"),
-      nationality: document.getElementById("nationality"),
-      qty: document.getElementById("qty"),
-      baseSalary: document.getElementById("baseSalary"),
-      allowance: document.getElementById("allowance"),
-      overtime: document.getElementById("overtime"),
-      otherCost: document.getElementById("otherCost"),
-      govFees: document.getElementById("govFees"),
-      insurance: document.getElementById("insurance"),
-      markup: document.getElementById("markup"),
-      discount: document.getElementById("discount")
-    };
+let editingId = null;
+let lines = [
+  { id: 'L_1', role: 'Financial Manager (VIP)', nat: 'SAU', qty: 2, fam: true, dep: 3, bas: 15000, hou: 3750, tra: 1500, foo: 0, inscat: 'VIP', req: 'Overseas', cost: 22000, svc: 26000, projGP: 4000, totalLine: 52000, gpPercent: 15.3, sys: { medOverride: 0, inscat: 'VIP' }, terms: { hou: 'us', tra: 'us' } },
+  { id: 'L_2', role: 'Senior Civil Engineer', nat: 'IND', qty: 5, fam: true, dep: 2, bas: 8500, hou: 2000, tra: 800, foo: 0, inscat: 'A', req: 'Overseas', cost: 12500, svc: 14500, projGP: 2000, totalLine: 72500, gpPercent: 13.8, sys: { medOverride: 0, inscat: 'A' }, terms: { hou: 'us', tra: 'us' } }
+];
 
-    const summary = {
-      service: document.getElementById("sumService"),
-      vat: document.getElementById("sumVat"),
-      net: document.getElementById("sumNet"),
-      total: document.getElementById("sumTotal")
-    };
-    const info = {
-      overlay: document.getElementById("infoOverlay"),
-      closeBtn: document.getElementById("infoCloseBtn"),
-      title: document.getElementById("infoTitle"),
-      body: document.getElementById("infoBody")
-    };
+const equations = {
+  svc: {
+    label: 'Service Price',
+    formula: 'Service Price = (Sellable Cost + Utilization + G&A + Commission + Other) + Markups + Operation Fees - Discount',
+    note: 'This is the core monthly sell price before VAT.'
+  },
+  vat: {
+    label: 'VAT Amount (15%)',
+    formula: 'VAT = Service Price × 0.15',
+    note: 'Standard VAT rate applied on service price.'
+  },
+  total: {
+    label: 'Net + VAT (Final)',
+    formula: 'Net + VAT = Service Price + VAT',
+    note: 'Final billed value per head.'
+  }
+};
 
-    const formulaDetails = {
-      govFees: "=IF(F61=3,D4/F10,0)",
-      insurance: "=SWITCH(F36,2, ... ,0)",
-      markup: "=F51"
-    };
+function getInsCost(cat, gen) {
+  if (gen === 'Male') {
+    if(cat==='VVIP') return 6051; if(cat==='VIP') return 5748; if(cat==='A+') return 4313; if(cat==='A') return 2965;
+    if(cat==='A-') return 2965; if(cat==='B+') return 3324; if(cat==='B') return 3094; if(cat==='B-') return 2812;
+    if(cat==='C') return 739; if(cat==='C-') return 394;
+  } else {
+    if(cat==='VVIP') return 6051; if(cat==='VIP') return 5748; if(cat==='A+') return 4313; if(cat==='A') return 2965;
+    if(cat==='A-') return 2965; if(cat==='B+') return 3234; if(cat==='B') return 3094; if(cat==='B-') return 2812;
+    if(cat==='C') return 739; if(cat==='C-') return 394;
+  }
+  return 739;
+}
 
-    const formatSAR = n => `SAR ${Number(n).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+function computeData() {
+  const role = $('p-role').value, vprof = $('p-vprof').value, pcat = $('p-pcat').value, mdeg = $('p-mdeg').value;
+  const nat = $('p-nat').value, gen = $('p-gen').value, req = $('p-req').value;
+  const qty = v('p-qty') || 1;
+  const c = v('p-con') || 24, v_elg = v('p-vac') || 21;
+  const fam = $('p-fam').checked, dep = fam ? v('p-dep') : 0;
 
-    function calcService() {
-      const base = +fields.baseSalary.value || 0;
-      const allowance = +fields.allowance.value || 0;
-      const overtime = +fields.overtime.value || 0;
-      const other = +fields.otherCost.value || 0;
-      const gov = +fields.govFees.value || 0;
-      const ins = +fields.insurance.value || 0;
-      const markup = (+fields.markup.value || 0) / 100;
-      const discount = (+fields.discount.value || 0) / 100;
-      const raw = base + allowance + overtime + other + gov + ins;
-      const withMarkup = raw * (1 + markup);
-      return withMarkup * (1 - discount);
-    }
+  const bas = v('c-bas'), hou = v('c-hou'), tra = v('c-tra'), foo = v('c-foo'), oth = v('c-oth');
+  const dng = v('c-dng'), inf = v('c-inf'), rem = v('c-rem'), nat_alw = v('c-nat');
+  const ot1 = v('c-ot1') * 1.5 * (bas/30/8);
+  const ot2 = v('c-ot2') * 2.0 * (bas/30/8);
+  const otf = v('c-otf');
 
-    function updateSummary() {
-      const service = calcService();
-      const qty = +fields.qty.value || 0;
-      const vat = service * VAT_RATE;
-      const net = service + vat;
-      summary.service.textContent = formatSAR(service);
-      summary.vat.textContent = formatSAR(vat);
-      summary.net.textContent = formatSAR(net);
-      summary.total.textContent = formatSAR(net * qty);
-    }
+  const t_rec = $('t-rec').value, t_vis = $('t-vis').value, t_mob = $('t-mob').value, t_rep = $('t-rep').value;
+  const t_hou = $('t-hou').value, t_tra = $('t-tra').value, t_foo = $('t-foo').value, t_vtc = $('t-vtc').value;
+  const t_mun = $('t-mun').value, t_mdc = $('t-mdc').value, t_exi = $('t-exi').value;
 
-    function renderTable() {
-      rowsEl.innerHTML = "";
-      lines.forEach((line, i) => {
-        const vat = line.service * VAT_RATE;
-        const net = line.service + vat;
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${i + 1}</td>
-          <td>${line.role}</td>
-          <td>${line.nationality}</td>
-          <td>${line.qty}</td>
-          <td class="money">${formatSAR(line.service)}</td>
-          <td>${formatSAR(vat)}</td>
-          <td class="money">${formatSAR(net * line.qty)}</td>
-          <td class="row-actions">
-            <button class="btn btn-ghost" onclick="openEdit(${i})">Edit</button>
-            <button class="btn btn-danger" onclick="removeLine(${i})">Delete</button>
-          </td>
-        `;
-        rowsEl.appendChild(tr);
-      });
-    }
+  const eff_hou = t_hou === 'us' ? hou : 0;
+  const eff_tra = t_tra === 'us' ? tra : 0;
+  const eff_foo = t_foo === 'us' ? foo : 0;
 
-    function openModal() { modal.classList.add("show"); }
-    function closeModal() {
-      modal.classList.remove("show");
-      closeInfo();
-      editIndex = null;
-    }
+  const eff_totalSal = bas + eff_hou + eff_tra + eff_foo + oth + dng + inf + rem + nat_alw + (ot1+ot2+otf);
+  const gosi = (eff_hou > 0 ? (bas + eff_hou) : (bas + bas*2/12)) * 0.02;
+  const wc = bas * 0.00118, pa = bas * 0.001;
+  const eosb = (bas + eff_hou + eff_tra + eff_foo + oth) / 24;
 
-    function showInfo(title, html) {
-      info.title.textContent = title;
-      info.body.innerHTML = html;
-      info.overlay.classList.add("show");
-    }
+  const mOverride = v('f-med');
+  const medRate = mOverride > 0 ? mOverride : getInsCost($('f-inscat').value, gen);
+  const medAmt = fam && dep > 0 ? (medRate + medRate * dep) / 12 : medRate / 12;
 
-    function closeInfo() {
-      info.overlay.classList.remove("show");
-    }
+  const wp = v('f-wp'), iqa = v('f-iqa'), aje = v('f-aje'), pay = v('f-pay');
+  const mun_val = t_mun === 'us' ? v('f-mun') : 0;
+  const mdq = v('f-mdq'), drv = v('f-drv'), exi = t_exi === 'us' ? v('f-exi') : 0, coc = v('f-coc');
+  const run = v('f-run'), uni = v('f-uni');
 
-    function showEquationInfo(fieldKey, label) {
-      const formula = formulaDetails[fieldKey] || "(No equation configured)";
-      const html = `
-        <table class="info-table">
-          <tr><th>Field</th><td>${label}</td></tr>
-          <tr><th>Equation</th><td class="mono">${formula}</td></tr>
-          <tr><th>How calculated</th><td>Final result is produced by your calculation engine after resolving cell/parameter references.</td></tr>
-          <tr><th>Display note</th><td>This popup explains formula source for users and approvers.</td></tr>
-        </table>
-      `;
-      showInfo(`Equation Details - ${label}`, html);
-    }
+  const agc_usd = t_rec === 'us' ? v('f-agc') * 3.75 : 0;
+  const vis = t_vis === 'us' ? v('f-vis') : 0;
+  const mob = t_mob === 'us' ? v('f-mob') : 0;
+  const rep = t_rep === 'us' ? v('f-rep') : 0;
+  const vac = t_vtc === 'us' ? v('f-vac') : 0;
+  const mdc = t_mdc === 'us' ? v('f-mdc') : 0;
 
-    function resetForm() {
-      document.getElementById("lineForm").reset();
-      fields.qty.value = 1;
-      fields.baseSalary.value = 5000;
-      fields.allowance.value = 500;
-      fields.overtime.value = 0;
-      fields.otherCost.value = 0;
-      fields.govFees.value = 200;
-      fields.insurance.value = 150;
-      fields.markup.value = 12;
-      fields.discount.value = 0;
-      updateSummary();
-    }
+  const accs = (wp/12) + (iqa/12) + (aje/12) + (pay/12) + (mun_val/12) + (run/12) + (uni/12);
+  const amorts = (mob*(1+dep)/c) + (rep*(1+dep)/c) + (vis/c) + (agc_usd/c) + (mdc*(1+dep)/c) + (mdq*(1+dep)/c) + (drv/c) + (vac*(1+dep)/v_elg) + (exi*(1+dep)/v_elg) + (coc/c);
 
-    function openAdd() {
-      modalTitle.textContent = "Add New Line";
-      editIndex = null;
-      resetForm();
-      openModal();
-    }
+  const valGross = eff_totalSal + gosi + wc + pa + eosb + medAmt + accs + amorts;
+  const vacSal = t_vtc === 'client' ? 0 : (eff_totalSal / 30 * v_elg) / 12;
+  const cost = valGross + vacSal;
 
-    window.openEdit = function(index) {
-      const line = lines[index];
-      editIndex = index;
-      modalTitle.textContent = `Edit Line #${index + 1}`;
-      resetForm();
-      fields.role.value = line.role;
-      fields.nationality.value = line.nationality;
-      fields.qty.value = line.qty;
-      fields.baseSalary.value = (line.service * 0.7).toFixed(2);
-      fields.allowance.value = (line.service * 0.1).toFixed(2);
-      fields.overtime.value = (line.service * 0.05).toFixed(2);
-      fields.otherCost.value = (line.service * 0.05).toFixed(2);
-      fields.govFees.value = (line.service * 0.05).toFixed(2);
-      fields.insurance.value = (line.service * 0.05).toFixed(2);
-      fields.markup.value = 8;
-      fields.discount.value = 0;
-      updateSummary();
-      openModal();
-    };
+  const pr_ga = v('pr-ga'), pr_com = v('pr-com'), pr_oth = v('pr-oth');
+  const pr_uti = v('pr-uti'), pr_mar = v('pr-mar'), pr_opr = v('pr-opr'), pr_dsc = v('pr-dsc');
+  const utilCost = cost * (pr_uti/100);
+  const totalCostHeads = cost + utilCost + pr_oth + pr_com + pr_ga;
+  const sellingPrice = totalCostHeads + pr_mar + pr_opr;
+  const svc = sellingPrice - pr_dsc;
+  const projGP = svc - cost;
+  const gpPercent = svc > 0 ? (projGP / svc * 100) : 0;
 
-    window.removeLine = function(index) {
-      if (!confirm("Delete this line?")) return;
-      lines.splice(index, 1);
-      renderTable();
-    };
+  return {
+    role, vprof, pcat, mdeg, nat, gen, req, qty, fam, dep, con: c, vac: v_elg,
+    bas, hou, tra, foo, oth, dng, inf, rem, nat_alw, ot1, ot2, otf,
+    cost, svc, projGP, gpPercent, totalLine: svc * qty,
+    pr_ga, pr_com, pr_oth, pr_uti, pr_mar, pr_opr, pr_dsc,
+    sys: { medOverride:mOverride, inscat:$('f-inscat').value, wp, iqa, aje, pay, mob:v('f-mob'), rep:v('f-rep'), vac:v('f-vac'), vis:v('f-vis'), agc:v('f-agc'), mdc:v('f-mdc'), mdq, drv:v('f-drv'), mun:v('f-mun'), exi:v('f-exi'), coc, run, uni },
+    terms: { rec:t_rec, vis:t_vis, mob:t_mob, rep:t_rep, hou:t_hou, tra:t_tra, foo:t_foo, vtc:t_vtc, mun:t_mun, mdc:t_mdc, exi:t_exi, idl:v('t-idl') || 1 }
+  };
+}
 
-    function saveLine() {
-      if (!fields.role.value.trim()) {
-        alert("Role / Position is required.");
-        return;
-      }
+function calcPreview(overridingObj = null) {
+  const d = overridingObj || computeData();
+  const svcVal = d.svc || 0;
+  const vat = svcVal * 0.15;
+  const netVat = svcVal + vat;
+  $('dash-role-name').textContent = d.role || 'Drafting mode...';
+  $('dash-svc').textContent = 'SAR ' + fmt(svcVal);
+  $('dash-vat').textContent = 'SAR ' + fmt(vat);
+  $('dash-total').textContent = 'SAR ' + fmt(netVat);
+  $('res-svc').textContent = 'SAR ' + fmt(svcVal);
+  $('res-vat').textContent = 'SAR ' + fmt(vat);
+  $('res-total').textContent = 'SAR ' + fmt(netVat);
+}
 
-      const item = {
-        role: fields.role.value.trim(),
-        nationality: fields.nationality.value,
-        qty: +fields.qty.value || 1,
-        service: calcService()
-      };
+function saveLine() {
+  const d = computeData();
+  if (!d.role.trim()) { alert('Position Title needed.'); return; }
+  if (editingId) {
+    const ix = lines.findIndex(l => l.id === editingId);
+    if (ix > -1) lines[ix] = { id: editingId, ...d };
+  } else {
+    d.id = 'L_' + Date.now();
+    lines.push(d);
+  }
+  localStorage.setItem('pricing_lines_v12', JSON.stringify(lines));
+  renderTable();
+  closeEditor();
+}
 
-      if (editIndex === null) lines.push(item);
-      else lines[editIndex] = item;
+function prepareNew() {
+  editingId = null;
+  $('form-title').textContent = 'Create New Line';
+  $('btn-save').textContent = 'Commit to Workspace';
+  $('btn-del').style.display = 'none';
+  document.querySelectorAll('#line-body tr').forEach(tr => tr.classList.remove('active'));
+  openEditor();
+}
 
-      renderTable();
-      closeModal();
-    }
+function loadLine(id) {
+  const l = lines.find(x => x.id === id);
+  if (!l) return;
+  editingId = id;
+  $('form-title').textContent = 'Edit Line: ' + l.role;
+  $('btn-save').textContent = 'Update Line';
+  $('btn-del').style.display = 'inline-flex';
+  document.querySelectorAll('#line-body tr').forEach(tr => tr.classList.toggle('active', tr.dataset.id === id));
+  ['role','vprof','pcat','mdeg','nat','gen','req','qty','con','vac','dep'].forEach(k => { if($('p-'+k)) $('p-'+k).value = l[k]; });
+  $('p-fam').checked = !!l.fam; $('fam-div').style.display = l.fam ? 'block' : 'none';
+  ['bas','hou','tra','foo','oth','dng','inf','rem','nat','ot1','ot2','otf'].forEach(k => { if($('c-'+k)) $('c-'+k).value = l[k] || 0; });
+  if (l.pr_ga !== undefined) {
+    $('pr-ga').value = l.pr_ga; $('pr-com').value = l.pr_com; $('pr-mar').value = l.pr_mar; $('pr-opr').value = l.pr_opr; $('pr-uti').value = l.pr_uti; $('pr-oth').value = l.pr_oth; $('pr-dsc').value = l.pr_dsc;
+  }
+  if (l.sys) {
+    $('f-inscat').value = l.sys.inscat; $('f-med').value = l.sys.medOverride || 0;
+    ['wp','iqa','aje','pay','mob','rep','vac','vis','agc','mdc','mdq','drv','mun','exi','coc','run','uni'].forEach(k => { if($('f-'+k)) $('f-'+k).value = l.sys[k] || 0; });
+  }
+  if (l.terms) {
+    ['rec','vis','mob','rep','hou','tra','foo','vtc','mun','mdc','exi','idl'].forEach(k => { if($('t-'+k)) $('t-'+k).value = l.terms[k]; });
+  }
+  calcPreview(l);
+  openEditor();
+}
 
-    document.getElementById("addLineBtn").addEventListener("click", openAdd);
-    document.getElementById("closeModalBtn").addEventListener("click", closeModal);
-    document.getElementById("cancelBtn").addEventListener("click", closeModal);
-    document.getElementById("saveBtn").addEventListener("click", saveLine);
-    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-    info.closeBtn.addEventListener("click", closeInfo);
-    info.overlay.addEventListener("click", (e) => { if (e.target === info.overlay) closeInfo(); });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        if (info.overlay.classList.contains("show")) closeInfo();
-        else if (modal.classList.contains("show")) closeModal();
-      }
-    });
-
-    Object.values(fields).forEach(el => el.addEventListener("input", updateSummary));
-
-    [
-      { id: "govFees", label: "Gov Fees" },
-      { id: "insurance", label: "Insurance" },
-      { id: "markup", label: "Markup (%)" }
-    ].forEach(({ id, label }) => {
-      const input = document.getElementById(id);
-      if (!input) return;
-      const wrap = document.createElement("div");
-      wrap.className = "formula-inline";
-      input.parentNode.insertBefore(wrap, input);
-      wrap.appendChild(input);
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "icon-btn";
-      btn.textContent = "i";
-      btn.title = `Info for ${label}`;
-      btn.addEventListener("click", () => showEquationInfo(id, label));
-      wrap.appendChild(btn);
-    });
-
+function applyDelete() {
+  if (!editingId) return;
+  if (confirm('Delete line from workspace?')) {
+    lines = lines.filter(l => l.id !== editingId);
+    localStorage.setItem('pricing_lines_v12', JSON.stringify(lines));
     renderTable();
-  </script>
+    closeEditor();
+  }
+}
+
+function renderTable() {
+  const tb = $('line-body');
+  if (!lines.length) {
+    tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:60px 20px; color:#6B7280;">Workspace is empty. Add new line.</td></tr>';
+    updateTotals();
+    return;
+  }
+  let h = '';
+  lines.forEach((l, i) => {
+    const vat = l.svc * 0.15;
+    const netVat = l.svc + vat;
+    h += `<tr onclick="loadLine('${l.id}')" data-id="${l.id}">
+      <td>${i+1}</td>
+      <td style="font-weight:600;">${l.role} <span style="font-size:10px; padding:2px 6px; background:#ECFDF5; color:#059669; border-radius:10px; margin-left:6px;">GP: ${l.gpPercent.toFixed(1)}%</span></td>
+      <td>${l.nat}</td>
+      <td class="num">${l.qty}</td>
+      <td class="num" style="color:var(--accent); font-weight:600;">${fmt(l.svc)}</td>
+      <td class="num">${fmt(vat)}</td>
+      <td class="num" style="color:var(--success); font-weight:600;">${fmt(netVat)}</td>
+      <td class="num" style="color:var(--success); font-weight:700;">${fmt(l.totalLine)}</td>
+    </tr>`;
+  });
+  tb.innerHTML = h;
+  updateTotals();
+}
+
+function updateTotals() {
+  let tQty = 0, tVat = 0, tSvc = 0, tRev = 0, tGP = 0;
+  lines.forEach(l => {
+    tQty += l.qty;
+    const lineVat = (l.svc * 0.15) * l.qty;
+    tVat += lineVat;
+    tSvc += (l.svc * l.qty);
+    tRev += (l.svc * 1.15) * l.qty;
+    tGP += (l.projGP * l.qty);
+  });
+  $('f-qty').textContent = tQty;
+  $('f-vat').textContent = fmt(tVat);
+  $('f-nvat').textContent = fmt(tRev);
+  $('f-rev').textContent = fmt(tRev);
+  $('st-qty').textContent = tQty;
+  $('st-lines').textContent = lines.length;
+  $('st-svc').textContent = fmt(tSvc);
+  $('st-vat').textContent = fmt(tVat);
+  $('st-mar').textContent = fmt(tGP);
+  $('st-bill').textContent = fmt(tRev);
+}
+
+function clearWorkspace() {
+  if (confirm('Are you sure you want to clear the entire workspace?')) {
+    lines = [];
+    localStorage.removeItem('pricing_lines_v12');
+    renderTable();
+    closeEditor();
+  }
+}
+
+function exportCSV() {
+  if (!lines.length) return alert('No data to export');
+  let csv = "Role,Nationality,Quantity,Gross Cost,Service Price/Unit,GP%,Total Revenue\n";
+  lines.forEach(l => {
+    csv += `"${l.role}","${l.nat}",${l.qty},${(l.cost||0).toFixed(2)},${l.svc.toFixed(2)},${l.gpPercent.toFixed(2)}%,${l.totalLine.toFixed(2)}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "pricing_export_" + Date.now() + ".csv";
+  a.click();
+}
+
+function seedExampleData() {
+  const dummySet = [
+    { role: 'Project Manager (Lead)', nat: 'SAU', qty: 1, bas: 22000, hou: 5500, tra: 2000, mar: 6000 },
+    { role: 'Financial Manager', nat: 'SAU', qty: 2, bas: 15000, hou: 3750, tra: 1500, mar: 4000 },
+    { role: 'Senior Civil Engineer', nat: 'IND', qty: 5, bas: 8500, hou: 2125, tra: 800, mar: 2000 },
+    { role: 'General Labor', nat: 'IND', qty: 100, bas: 1100, hou: 0, tra: 0, mar: 300 }
+  ];
+  lines = [];
+  dummySet.forEach((d, idx) => {
+    const cost = (d.bas + d.hou + d.tra) * 1.45;
+    const svc = cost + d.mar;
+    lines.push({
+      id: 'L_DEMO_' + idx, role: d.role, nat: d.nat, qty: d.qty, bas: d.bas, hou: d.hou, tra: d.tra, foo: 300,
+      cost, svc, projGP: d.mar, gpPercent: (d.mar/svc)*100, totalLine: svc * d.qty, fam: false, dep: 0, con: 24, vac: 21,
+      sys: { inscat: 'C', medOverride: 0, wp: 9700, iqa: 650, aje: 240 }, terms: { hou: 'us', tra: 'us', rec: 'us', vis: 'us', mob: 'us', rep: 'us', foo: 'us', vtc: 'us', mun: 'us', mdc: 'us', exi: 'us' }
+    });
+  });
+  localStorage.setItem('pricing_lines_v12', JSON.stringify(lines));
+  renderTable();
+}
+
+function toggleAcc(headerEl) {
+  const section = headerEl.parentElement;
+  section.classList.toggle('open');
+}
+
+let searchDebounce;
+function searchFields() {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    const q = $('field-search').value.toLowerCase().trim();
+    document.querySelectorAll('.highlight-match').forEach(el => el.classList.remove('highlight-match'));
+    if (!q) return;
+    const labels = document.querySelectorAll('.fg label, .toggle-row label');
+    let firstMatch = null;
+    labels.forEach(label => {
+      if (label.innerText.toLowerCase().includes(q)) {
+        const grp = label.closest('.fg') || label.closest('.toggle-row');
+        if (!grp) return;
+        grp.classList.add('highlight-match');
+        if (!firstMatch) firstMatch = grp;
+        const sec = grp.closest('.section');
+        if (sec && !sec.classList.contains('open')) sec.classList.add('open');
+      }
+    });
+    if (firstMatch) firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 250);
+}
+
+function showEqInfo(key) {
+  const eq = equations[key];
+  if (!eq) return;
+  const current = key === 'svc' ? $('res-svc').textContent : key === 'vat' ? $('res-vat').textContent : $('res-total').textContent;
+  $('eqInfoTitle').textContent = 'Equation Details - ' + eq.label;
+  $('eqInfoBody').innerHTML = `
+    <table class="info-table">
+      <tr><th>Metric</th><td>${eq.label}</td></tr>
+      <tr><th>Equation</th><td class="mono">${eq.formula}</td></tr>
+      <tr><th>Current Value</th><td><strong>${current}</strong></td></tr>
+      <tr><th>How it works</th><td>${eq.note}</td></tr>
+    </table>
+  `;
+  $('eqInfoModal').classList.add('show');
+}
+function closeEqInfo() { $('eqInfoModal').classList.remove('show'); }
+
+function openEditor() { $('editModal').classList.add('show'); }
+function closeEditor() { $('editModal').classList.remove('show'); }
+
+function boot() {
+  const saved = localStorage.getItem('pricing_lines_v12');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length) lines = parsed;
+      else seedExampleData();
+    } catch {
+      seedExampleData();
+    }
+  } else {
+    seedExampleData();
+  }
+  renderTable();
+  calcPreview();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  boot();
+  $('editModal').addEventListener('click', (e) => { if (e.target === $('editModal')) closeEditor(); });
+  $('eqInfoModal').addEventListener('click', (e) => { if (e.target === $('eqInfoModal')) closeEqInfo(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if ($('eqInfoModal').classList.contains('show')) closeEqInfo();
+    else if ($('editModal').classList.contains('show')) closeEditor();
+  });
+});
+</script>
 </body>
 </html>
