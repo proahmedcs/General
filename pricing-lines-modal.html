@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing Lines - Grouped Modal</title>
+  <title>Pricing Lines - Modal UI</title>
   <style>
     :root {
       --bg: #f3f6fb;
-      --card: #fff;
-      --line: #dce3ef;
-      --text: #122033;
-      --muted: #5f7088;
-      --primary: #2f6feb;
-      --primary-dark: #1f57c8;
-      --danger: #b42318;
-      --ok: #157347;
+      --card: #ffffff;
+      --text: #1c2434;
+      --muted: #667085;
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --line: #e5e7eb;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
       --radius: 14px;
-      --shadow: 0 12px 30px rgba(13, 23, 45, 0.12);
     }
 
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #f7f9ff 0%, #eef3fb 100%);
       color: var(--text);
-      background: linear-gradient(180deg, #f8faff 0%, #edf3fc 100%);
     }
 
     .app {
-      max-width: 1280px;
-      margin: 20px auto;
+      max-width: 1250px;
+      margin: 24px auto;
       padding: 0 16px 24px;
     }
 
@@ -38,575 +38,261 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 14px 16px;
+      padding: 14px 18px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
-    .topbar h1 {
+    .brand h1 {
       margin: 0;
       font-size: 20px;
       font-weight: 700;
-      letter-spacing: 0.2px;
+      letter-spacing: .2px;
     }
-    .topbar .sub {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    .brand small { color: var(--muted); }
 
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
     .btn {
       border: 0;
       border-radius: 10px;
       padding: 10px 14px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
-      transition: all .2s ease;
-      font-size: 13px;
+      transition: .2s ease;
     }
-    .btn:hover { transform: translateY(-1px); }
-    .btn.primary { background: var(--primary); color: #fff; }
-    .btn.primary:hover { background: var(--primary-dark); }
-    .btn.soft { background: #eaf1ff; color: #25427f; }
-    .btn.danger { background: #fee4e2; color: var(--danger); }
-
-    .status {
-      margin-left: auto;
-      padding: 6px 10px;
-      border-radius: 99px;
-      font-size: 12px;
-      font-weight: 700;
-      background: #edf5ff;
-      color: #1849a9;
-      border: 1px solid #cce0ff;
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-ghost {
+      background: #eef2ff;
+      color: #334155;
+    }
+    .btn-danger {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
-    .table-panel {
+    .panel {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
-    table { width: 100%; border-collapse: collapse; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
     thead th {
       text-align: left;
-      background: #f8fbff;
-      color: #4e5f76;
-      font-size: 12px;
-      letter-spacing: 0.2px;
+      background: #f8fafc;
+      color: #475467;
+      font-size: 13px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--line);
-      padding: 12px;
     }
     tbody td {
-      padding: 12px;
-      border-bottom: 1px solid #e8edf5;
-      font-size: 13px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf2f7;
+      font-size: 14px;
     }
     tbody tr:hover { background: #f9fbff; }
-    .money { font-weight: 700; color: #224280; }
+    .money { font-weight: 700; color: #1f3f8f; }
     .row-actions { display: flex; gap: 8px; }
 
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(7, 18, 38, 0.55);
+      background: rgba(2, 6, 23, 0.55);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
       z-index: 1000;
     }
     .modal-overlay.show { display: flex; }
 
     .modal {
-      width: min(1300px, 100%);
-      max-height: 94vh;
+      width: min(1100px, 100%);
+      max-height: 92vh;
       overflow: auto;
       background: #fff;
       border-radius: 18px;
-      border: 1px solid #dbe5f3;
-      box-shadow: 0 22px 55px rgba(5, 16, 35, 0.35);
+      box-shadow: 0 18px 45px rgba(2, 6, 23, .4);
+      border: 1px solid #e6ebf4;
     }
 
     .modal-head {
       position: sticky;
       top: 0;
-      z-index: 7;
-      background: linear-gradient(90deg, #2f6feb, #4f46e5);
+      z-index: 5;
+      background: linear-gradient(90deg, #2563eb, #4f46e5);
       color: #fff;
-      padding: 14px 18px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
     }
     .modal-head h2 { margin: 0; font-size: 18px; }
-    .modal-head .meta {
-      font-size: 12px;
-      opacity: .95;
-      font-weight: 600;
-    }
-    .close {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
+    .close-x {
       border: 0;
+      background: rgba(255,255,255,.18);
       color: #fff;
-      background: rgba(255, 255, 255, 0.18);
-      font-size: 18px;
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
       cursor: pointer;
+      font-size: 18px;
     }
 
-    .modal-content {
-      padding: 14px;
+    .modal-body {
       display: grid;
-      gap: 12px;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 16px;
+      padding: 16px;
     }
 
-    .top-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 12px;
-    }
-
-    .card {
+    .group {
       border: 1px solid var(--line);
       border-radius: 12px;
-      background: #fff;
       padding: 12px;
+      margin-bottom: 12px;
+      background: #fcfdff;
     }
-    .card h3 {
+    .group h3 {
       margin: 0 0 10px;
       font-size: 14px;
-      letter-spacing: .2px;
+      color: #111827;
     }
 
-    .form-grid {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(220px, 1fr));
-      gap: 12px;
-    }
-    .group-label {
-      grid-column: 1 / -1;
-      font-size: 13px;
-      font-weight: 800;
-      color: #2a4674;
-      border-top: 1px solid #e4ebf7;
-      padding-top: 8px;
-      margin-top: 2px;
-    }
-    .group-label:first-child {
-      border-top: 0;
-      padding-top: 0;
-      margin-top: 0;
-    }
-    .field {
-      border: 1px solid #e2e9f5;
-      border-radius: 12px;
-      background: #f8fbff;
-      padding: 10px;
-    }
-    .field input,
-    .field select {
-      min-height: 42px;
-      font-size: 14px;
-      font-weight: 700;
-      background: #fff;
-      border-color: #d4deee;
-    }
-    .field.amount {
-      padding-bottom: 9px;
-    }
-    .amount-shell {
-      display: flex;
-      align-items: center;
-      border: 1px solid #d4deee;
-      border-radius: 10px;
-      min-height: 42px;
-      background: #fff;
-      padding: 0 10px;
-      transition: box-shadow .2s ease, border-color .2s ease;
-    }
-    .amount-prefix {
-      color: #98a5b8;
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      margin-right: 8px;
-    }
-    .amount-shell input {
-      border: 0;
-      box-shadow: none;
-      background: transparent;
-      padding: 0;
-      min-height: 36px;
-      font-variant-numeric: tabular-nums;
-      color: #1f2f47;
-    }
-    .amount-shell input:focus {
-      box-shadow: none;
-      border: 0;
-    }
-    .amount-shell:focus-within {
-      border-color: #7ea4ff;
-      box-shadow: 0 0 0 3px rgba(47, 111, 235, 0.14);
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 10px;
     }
 
     label {
       display: block;
       font-size: 12px;
-      color: #5a6c84;
-      margin-bottom: 5px;
-      font-weight: 700;
+      font-weight: 600;
+      color: #475467;
+      margin-bottom: 6px;
     }
-    label.required::after {
-      content: " *";
-      color: #c81e1e;
-      font-weight: 800;
-    }
-
-    input, select, textarea {
+    input, select {
       width: 100%;
-      border-radius: 9px;
-      border: 1px solid #ccd7e8;
-      padding: 8px 10px;
-      font-size: 13px;
-      background: #fff;
-      color: var(--text);
+      border: 1px solid #d0d7e4;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 14px;
       outline: none;
+      background: #fff;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: #81a8ff;
-      box-shadow: 0 0 0 3px rgba(47, 111, 235, 0.15);
+    input:focus, select:focus {
+      border-color: #7da7ff;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
     }
 
-    .summary-grid {
-      display: grid;
-      gap: 6px;
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 13px;
+      color: #334155;
     }
+
+    .summary {
+      position: sticky;
+      top: 76px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      height: fit-content;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+    }
+    .summary h3 { margin: 0 0 10px; }
     .metric {
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px dashed #cad7ee;
-      padding: 4px 0;
-      font-size: 12px;
-    }
-    .metric strong { color: #102748; font-size: 12px; }
-
-    .basic-collapsible {
-      border: 1px solid #dbe5f6;
-      border-radius: 12px;
-      background: #fcfdff;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-    .basic-collapsible > summary {
-      list-style: none;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      font-size: 13px;
-      font-weight: 800;
-      color: #234172;
-      background: #f4f8ff;
-      border-bottom: 1px solid #dbe5f6;
-    }
-    .basic-collapsible > summary::-webkit-details-marker { display: none; }
-    .basic-collapsible > summary::after {
-      content: "Show";
-      font-size: 11px;
-      color: #4f6d99;
-      border: 1px solid #cad9f2;
-      background: #fff;
-      border-radius: 999px;
-      padding: 2px 8px;
-    }
-    .basic-collapsible[open] > summary::after { content: "Hide"; }
-    .basic-summary-line {
-      font-size: 12px;
-      color: #4f6689;
-      font-weight: 700;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: 70%;
-    }
-
-    .section-head {
-      position: sticky;
-      top: 64px;
-      z-index: 5;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: #ffffff;
-      padding: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      box-shadow: 0 8px 20px rgba(17, 35, 63, 0.08);
-    }
-    .tools-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid #cedbf2;
-      background: #f7faff;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #35507c;
-    }
-    .chip input {
-      width: auto;
-      margin: 0;
-      padding: 0;
-    }
-
-    .tabs {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-    .tabs-main {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-    .tabs-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: #5b6f8e;
-      margin-bottom: 6px;
-      letter-spacing: .2px;
-      text-transform: uppercase;
-    }
-    .tab-btn {
-      border: 1px solid #cbd8ee;
-      background: #fff;
-      color: #2e4b83;
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .tab-btn.active {
-      background: #e9f1ff;
-      border-color: #8fb2ff;
-      color: #0b3ea6;
-    }
-
-    .panel {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: #fff;
-      padding: 10px;
-      max-height: 44vh;
-      overflow: auto;
-    }
-
-    .empty {
-      padding: 18px;
-      border: 1px dashed #cdd9ec;
-      border-radius: 10px;
-      text-align: center;
-      color: var(--muted);
-      background: #fafcff;
-      font-size: 13px;
-    }
-
-    .config-group {
-      border: 1px solid #d9e4f5;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      overflow: hidden;
-    }
-    .group-head {
-      background: #f5f9ff;
-      padding: 9px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      color: #213f78;
-      border-bottom: 1px solid #d9e4f5;
-    }
-    .pill {
-      background: #e8f1ff;
-      border: 1px solid #c5d9ff;
-      border-radius: 99px;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 2px 8px;
-    }
-
-    details.param-row {
-      border-bottom: 1px solid #e9eff8;
-      background: #fff;
-    }
-    details.param-row:last-child { border-bottom: 0; }
-    .param-title {
-      list-style: none;
-      margin: 0;
-      padding: 9px 10px;
-      font-size: 12px;
-      color: #30465f;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      cursor: pointer;
-      background: #fcfeff;
-    }
-    .param-title::-webkit-details-marker {
-      display: none;
-    }
-    .param-title::before {
-      content: "▸";
-      font-size: 11px;
-      color: #486692;
-      font-weight: 900;
-      margin-right: 2px;
-      transform: translateY(-1px);
-    }
-    details[open] > .param-title::before {
-      content: "▾";
-    }
-    .param-body {
-      padding: 0 10px 10px;
-    }
-    .param-title .idx {
-      background: #edf2fb;
-      border: 1px solid #d5dfef;
-      padding: 1px 6px;
-      border-radius: 6px;
-      font-weight: 800;
-      color: #3f5879;
-    }
-    .param-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
-      gap: 8px;
-      justify-content: start;
-    }
-    .param-grid .wide {
-      grid-column: span 2;
-      max-width: 448px;
-    }
-    .param-grid .formula input {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-    }
-    .field-inline {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .info-btn {
-      width: 24px;
-      height: 24px;
-      border: 1px solid #bfd1ee;
-      border-radius: 999px;
-      background: #eef5ff;
-      color: #1f4ea2;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      flex: 0 0 auto;
-      line-height: 1;
-    }
-    .info-btn .sar-mark {
-      font-size: 13px;
-      font-weight: 900;
-      line-height: 1;
-      transform: translateY(-0.5px);
-      display: inline-block;
-    }
-    .info-btn:hover {
-      background: #dfeeff;
-      border-color: #99b7eb;
-    }
-    .sar-icon-btn {
-      width: 28px;
-      height: 28px;
-      border: 1px solid #bfd1ee;
-      border-radius: 999px;
-      background: #eef5ff;
-      color: #1f4ea2;
-      cursor: pointer;
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-      transition: background .2s ease, border-color .2s ease;
-    }
-    .sar-icon-btn:hover {
-      background: #dfeeff;
-      border-color: #99b7eb;
-    }
-    .sar-icon-btn .sar-glyph {
+      border-bottom: 1px dashed #c9d5ee;
+      padding: 8px 0;
       font-size: 14px;
-      font-weight: 900;
     }
+    .metric strong { color: #0f172a; }
+
+    .modal-foot {
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      background: #fff;
+      border-top: 1px solid var(--line);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .formula-inline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 1px solid #bfd1ee;
+      background: #eef5ff;
+      color: #1f4ea2;
+      font-weight: 800;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .icon-btn:hover {
+      background: #dfeeff;
+      border-color: #99b7eb;
+    }
+
     .info-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(7, 18, 38, 0.48);
+      background: rgba(2, 6, 23, 0.55);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 24px;
       z-index: 1200;
     }
     .info-overlay.show { display: flex; }
     .info-card {
       width: min(760px, 100%);
-      max-height: 85vh;
+      max-height: 86vh;
       overflow: auto;
-      border-radius: 14px;
-      border: 1px solid #d7e4fa;
       background: #fff;
-      box-shadow: 0 18px 42px rgba(8, 17, 33, 0.35);
+      border-radius: 14px;
+      border: 1px solid #d9e4f5;
+      box-shadow: 0 18px 45px rgba(2, 6, 23, .32);
     }
     .info-head {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 12px 14px;
-      border-bottom: 1px solid #dce6f6;
-      background: #f3f8ff;
+      border-bottom: 1px solid #e6ecf7;
+      background: #f5f9ff;
     }
-    .info-head h4 {
+    .info-head h3 {
       margin: 0;
       font-size: 14px;
-      color: #14386f;
+      color: #183b75;
     }
     .info-body {
       padding: 12px 14px;
@@ -618,9 +304,8 @@
       border-collapse: collapse;
       font-size: 12px;
     }
-    .info-table th,
-    .info-table td {
-      border: 1px solid #dfebfb;
+    .info-table th, .info-table td {
+      border: 1px solid #e1e9f7;
       padding: 7px 8px;
       text-align: left;
       vertical-align: top;
@@ -628,260 +313,36 @@
     .info-table th {
       width: 170px;
       background: #f7fbff;
-      color: #28456f;
+      color: #2b4a78;
     }
     .mono {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 12px;
     }
-    .kv-list {
-      border: 1px solid #dce7f8;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .kv-row {
-      display: grid;
-      grid-template-columns: 1fr 170px;
-      border-bottom: 1px solid #e8effb;
-      font-size: 12px;
-    }
-    .kv-row:last-child { border-bottom: 0; }
-    .kv-key {
-      padding: 8px 10px;
-      color: #264570;
-      background: #f8fbff;
-      font-weight: 700;
-    }
-    .kv-val {
-      padding: 8px 10px;
-      color: #102b53;
-      font-weight: 800;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-    .formula-read {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 6px;
-      min-height: 34px;
-    }
-    .param-grid .numeric input {
-      max-width: 150px;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-    .param-grid .guid input {
-      font-size: 12px;
-      max-width: 220px;
-    }
-    .flat-row {
-      border-bottom: 1px solid #e9eff8;
-      background: #fff;
-      padding: 10px;
-    }
-    .flat-row:last-child {
-      border-bottom: 0;
-    }
-    .flat-row .param-title {
-      cursor: default;
-      padding: 0 0 8px;
-      background: transparent;
-    }
-    .flat-row .param-title::before {
-      content: "";
-      display: none;
-    }
-    .flat-row .param-body {
-      padding: 0;
-    }
-    .quote-grid {
-      display: grid;
-      grid-template-columns: minmax(190px, 240px) minmax(260px, 1fr) minmax(190px, 240px);
-      gap: 10px;
-      align-items: start;
-    }
-    .quote-grid .formula {
-      min-width: 0;
-    }
-    .quote-grid .formula input {
-      width: 100%;
-    }
-    .hint {
-      margin-top: 4px;
-      color: #6d7f95;
-      font-size: 11px;
-      line-height: 1.25;
-    }
-    .config-note {
-      margin-top: 6px;
-      color: #5f7392;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .basic-info-details {
-      border: 1px solid #dce7f8;
-      border-radius: 12px;
-      background: #fbfdff;
-      overflow: hidden;
-    }
-    .basic-info-summary {
-      list-style: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      background: #f3f7ff;
-      border-bottom: 1px solid #dce7f8;
-      cursor: pointer;
-    }
-    .basic-info-summary::-webkit-details-marker { display: none; }
-    .basic-info-title-wrap {
-      display: grid;
-      gap: 2px;
-      min-width: 0;
-    }
-    .basic-info-title-wrap h3 {
-      margin: 0;
-    }
-    .basic-info-preview {
-      font-size: 12px;
-      color: #35517e;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 640px;
-    }
-    .summary-pill {
-      border: 1px solid #bed1f0;
-      background: #fff;
-      color: #1f4a92;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-    details.inline-config {
-      margin-top: 8px;
-      border: 1px dashed #cddcf3;
-      border-radius: 10px;
-      background: #fbfdff;
-    }
-    details.inline-config > summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 8px 10px;
-      font-size: 12px;
-      font-weight: 800;
-      color: #30507f;
-      user-select: none;
-    }
-    details.inline-config > summary::-webkit-details-marker {
-      display: none;
-    }
-    details.inline-config > summary::before {
-      content: "+";
-      display: inline-block;
-      width: 14px;
-      color: #4d6ea0;
-      font-weight: 900;
-    }
-    details.inline-config[open] > summary::before {
-      content: "-";
-    }
-    details.inline-config > .param-grid {
-      padding: 0 10px 10px;
-    }
-    .warn {
-      border: 1px solid #fecaca;
-      background: #fff5f5;
-      color: #9f1239;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .ok {
-      border: 1px solid #b7ebca;
-      background: #eefcf3;
-      color: #196b41;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .check {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid #d7e2f3;
-      border-radius: 9px;
-      padding: 8px 9px;
-      background: #fcfdff;
-      min-height: 37px;
-    }
-    .check input { width: auto; margin: 0; }
-    .check span {
-      font-size: 12px;
-      color: #334a68;
-      font-weight: 700;
-    }
 
-    .modal-foot {
-      position: sticky;
-      bottom: 0;
-      background: #fff;
-      border-top: 1px solid var(--line);
-      padding: 10px 14px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      z-index: 6;
-    }
-
-    pre.raw {
-      margin: 0;
-      background: #0e1a2b;
-      color: #c8defc;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 11px;
-      overflow: auto;
-      max-height: 39vh;
-    }
-
-    @media (max-width: 1100px) {
-      .top-grid { grid-template-columns: 1fr; }
-      .form-grid, .param-grid { grid-template-columns: 1fr 1fr; }
-      .quote-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    @media (max-width: 720px) {
-      .form-grid, .param-grid { grid-template-columns: 1fr; }
-      .topbar { flex-direction: column; align-items: stretch; }
-      .btn-row { justify-content: stretch; }
+    @media (max-width: 980px) {
+      .modal-body { grid-template-columns: 1fr; }
+      .summary { position: static; }
+      .grid { grid-template-columns: 1fr; }
+      table { font-size: 13px; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
-      <div>
+      <div class="brand">
         <h1>Pricing Engine - Costing Lines</h1>
-        <div class="sub">Modal editor with Basic Info, Summary, tabs, and grouped parameters from JSON</div>
+        <small>Organized line management with grouped modal editor</small>
       </div>
-      <div class="btn-row">
-        <button class="btn soft" type="button">Export CSV</button>
-        <button id="addLineBtn" class="btn primary" type="button">+ Add New Line</button>
+      <div class="actions">
+        <button class="btn btn-ghost">Export CSV</button>
+        <button id="addLineBtn" class="btn btn-primary">+ Add New Line</button>
       </div>
-      <div id="loadStatus" class="status">Loading JSON fields...</div>
     </div>
 
-    <div class="table-panel">
-      <table>
+    <div class="panel">
+      <table id="linesTable">
         <thead>
           <tr>
             <th>#</th>
@@ -902,204 +363,147 @@
   <div id="modalOverlay" class="modal-overlay">
     <div class="modal">
       <div class="modal-head">
-        <div>
-          <h2 id="modalTitle">Add New Line</h2>
-          <div id="modalMeta" class="meta">Basic Info + Summary + grouped tabs</div>
-        </div>
-        <button id="closeModalBtn" class="close" type="button" aria-label="Close">&times;</button>
+        <h2 id="modalTitle">Add New Line</h2>
+        <button class="close-x" id="closeModalBtn">&times;</button>
       </div>
 
-      <div class="modal-content">
-        <div class="top-grid">
-          <section class="card">
-            <details id="basicInfoDetails" class="basic-info-details">
-              <summary class="basic-info-summary">
-                <div class="basic-info-title-wrap">
-                  <h3>Basic Info</h3>
-                  <span id="basicInfoPreview" class="basic-info-preview">Role: -- | Nationality: -- | Qty: -- | Contract: --</span>
-                </div>
-                <span class="summary-pill">Edit</span>
-              </summary>
-              <div id="mandatoryBanner" class="ok">Ready to save. Mandatory fields are complete.</div>
-              <div class="form-grid">
-              <div class="group-label">1. Line Info</div>
-              <div class="field">
-                <label for="role" class="required">Role / Position</label>
+      <div class="modal-body">
+        <form id="lineForm">
+          <div class="group">
+            <h3>1) Basic Details</h3>
+            <div class="grid">
+              <div>
+                <label>Role / Position</label>
                 <input id="role" required />
               </div>
-              <div class="field">
-                <label for="nationality" class="required">Nationality</label>
+              <div>
+                <label>Nationality</label>
                 <select id="nationality">
-                  <option>SAU</option>
-                  <option>IND</option>
-                  <option>EGY</option>
-                  <option>PAK</option>
-                  <option>PHL</option>
+                  <option>SAU</option><option>IND</option><option>EGY</option><option>PAK</option><option>PHL</option>
                 </select>
               </div>
-              <div class="field">
-                <label for="qty" class="required">Quantity</label>
+              <div>
+                <label>Quantity</label>
                 <input id="qty" type="number" min="1" value="1" />
               </div>
-              <div class="field">
-                <label for="contractType" class="required">Contract Type</label>
+              <div>
+                <label>Contract Type</label>
                 <select id="contractType">
                   <option>Monthly</option>
                   <option>Yearly</option>
                   <option>Project Based</option>
                 </select>
               </div>
-              <div class="field">
-                <label for="clientName">Client</label>
-                <input id="clientName" value="Aramco" />
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>2) Compensation &amp; Allowances</h3>
+            <div class="grid">
+              <div>
+                <label>Base Salary</label>
+                <input id="baseSalary" type="number" step="0.01" value="5000" />
               </div>
-              <div class="field">
-                <label for="projectName">Project</label>
-                <input id="projectName" value="Master Client" />
+              <div>
+                <label>Allowance</label>
+                <input id="allowance" type="number" step="0.01" value="500" />
               </div>
-              <div class="group-label">2. Compensation &amp; Allowances</div>
-              <div class="field amount">
-                <label for="baseSalary" class="required">Base Salary</label>
-                <div class="amount-shell">
-                  <span class="amount-prefix">SAR</span>
-                  <input id="baseSalary" class="is-mandatory-phl" type="number" step="0.01" value="5000" />
-                </div>
+              <div>
+                <label>Overtime</label>
+                <input id="overtime" type="number" step="0.01" value="0" />
               </div>
-              <div class="field amount">
-                <label for="allowance" class="required">Allowance</label>
-                <div class="amount-shell">
-                  <span class="amount-prefix">SAR</span>
-                  <input id="allowance" class="is-mandatory-phl" type="number" step="0.01" value="500" />
-                </div>
+              <div>
+                <label>Other Cost</label>
+                <input id="otherCost" type="number" step="0.01" value="0" />
               </div>
-              <div class="field amount">
-                <label for="overtime">Overtime</label>
-                <div class="amount-shell">
-                  <span class="amount-prefix">SAR</span>
-                  <input id="overtime" type="number" step="0.01" value="0" />
-                </div>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>3) Gov. &amp; Operational Fees</h3>
+            <div class="grid">
+              <div>
+                <label>Gov Fees</label>
+                <input id="govFees" type="number" step="0.01" value="200" />
               </div>
-              <div class="field amount">
-                <label for="otherCost">Other Cost</label>
-                <div class="amount-shell">
-                  <span class="amount-prefix">SAR</span>
-                  <input id="otherCost" type="number" step="0.01" value="0" />
-                </div>
+              <div>
+                <label>Insurance</label>
+                <input id="insurance" type="number" step="0.01" value="150" />
               </div>
-              <div class="field amount">
-                <label for="govFees">Gov. Fees</label>
-                <div class="amount-shell">
-                  <span class="amount-prefix">SAR</span>
-                  <input id="govFees" class="is-mandatory-phl" type="number" step="0.01" value="200" />
-                </div>
-              </div>
-              <div class="field amount">
-                <label for="insurance">Insurance</label>
-                <div class="amount-shell">
-                  <span class="amount-prefix">SAR</span>
-                  <input id="insurance" class="is-mandatory-phl" type="number" step="0.01" value="150" />
-                </div>
-              </div>
-              <div class="field">
-                <label for="markup">Markup (%)</label>
+            </div>
+            <div class="toggle-wrap">
+              <input id="familyStatus" type="checkbox" />
+              <label for="familyStatus" style="margin:0;">Enable Family Status</label>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>4) Quotation Scopes</h3>
+            <div class="grid">
+              <div class="toggle-wrap"><input id="scopeAjeer" type="checkbox" /> <label for="scopeAjeer" style="margin:0;">Ajeer Scope</label></div>
+              <div class="toggle-wrap"><input id="scopeVisa" type="checkbox" checked /> <label for="scopeVisa" style="margin:0;">Visa Scope</label></div>
+              <div class="toggle-wrap"><input id="scopeMedical" type="checkbox" checked /> <label for="scopeMedical" style="margin:0;">Medical Scope</label></div>
+              <div class="toggle-wrap"><input id="scopeTicket" type="checkbox" /> <label for="scopeTicket" style="margin:0;">Ticket Scope</label></div>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>5) Pricing Margins &amp; Overheads</h3>
+            <div class="grid">
+              <div>
+                <label>Markup (%)</label>
                 <input id="markup" type="number" step="0.01" value="12" />
               </div>
-              <div class="field">
-                <label for="discount">Discount (%)</label>
+              <div>
+                <label>Discount (%)</label>
                 <input id="discount" type="number" step="0.01" value="0" />
               </div>
-              </div>
-            </details>
-          </section>
-
-          <aside class="card">
-            <h3>Summary</h3>
-            <div class="summary-grid">
-              <div class="metric"><span>Service Price</span><strong id="sumService">SAR 0.00</strong></div>
-              <div class="metric"><span>VAT (15%)</span><strong id="sumVat">SAR 0.00</strong></div>
-              <div class="metric"><span>Net + VAT</span><strong id="sumNet">SAR 0.00</strong></div>
-              <div class="metric"><span>Total for Qty</span><strong id="sumTotal">SAR 0.00</strong></div>
-              <div class="metric"><span>Total JSON Records</span><strong id="sumRecords">0</strong></div>
-              <div class="metric"><span>Configured Total Fees</span><strong id="sumFees">0</strong></div>
-              <div class="metric"><span>Configured General Settings</span><strong id="sumSettings">0</strong></div>
             </div>
-          </aside>
-        </div>
-
-        <section class="section-head">
-          <div class="tabs" id="tabs"></div>
-          <div class="tools-row" style="min-width:280px;">
-            <input id="configSearch" type="text" placeholder="Search fields in current tab..." />
-            <label class="chip"><input id="compactModeToggle" type="checkbox" checked /> Compact fields</label>
-            <label class="chip"><input id="philippinesRuleToggle" type="checkbox" checked /> PH mandatory rules</label>
-            <button id="expandAllBtn" class="btn soft" type="button">Expand all</button>
-            <button id="collapseAllBtn" class="btn soft" type="button">Collapse all</button>
-            <button id="downloadJsonBtn" class="btn soft" type="button">Download JSON</button>
           </div>
-          <div class="config-note">Primary business fields are shown first. Remaining options are under <strong>Configuration</strong>.</div>
-        </section>
+        </form>
 
-        <section class="panel" id="tabPanel"></section>
+        <aside class="summary">
+          <h3>Live Summary</h3>
+          <div class="metric"><span>Service Price</span><strong id="sumService">SAR 0.00</strong></div>
+          <div class="metric"><span>VAT (15%)</span><strong id="sumVat">SAR 0.00</strong></div>
+          <div class="metric"><span>Net + VAT</span><strong id="sumNet">SAR 0.00</strong></div>
+          <div class="metric"><span>Total for Qty</span><strong id="sumTotal">SAR 0.00</strong></div>
+        </aside>
       </div>
 
       <div class="modal-foot">
-        <button id="cancelBtn" class="btn soft" type="button">Cancel</button>
-        <button id="saveBtn" class="btn primary" type="button">Save Line</button>
+        <button class="btn btn-ghost" id="cancelBtn" type="button">Cancel</button>
+        <button class="btn btn-primary" id="saveBtn" type="button">Save Line</button>
       </div>
     </div>
   </div>
 
-  <div id="equationOverlay" class="info-overlay">
+  <div id="infoOverlay" class="info-overlay">
     <div class="info-card">
       <div class="info-head">
-        <h4 id="equationTitle">Equation Details</h4>
-        <button id="equationCloseBtn" class="btn soft" type="button">Close</button>
+        <h3 id="infoTitle">Equation Details</h3>
+        <button id="infoCloseBtn" class="btn btn-ghost" type="button">Close</button>
       </div>
-      <div id="equationContent" class="info-body"></div>
+      <div id="infoBody" class="info-body"></div>
     </div>
   </div>
 
   <script>
     const VAT_RATE = 0.15;
-    const DATASET_URL = "./quotation-fees-and-settings.json";
-    const TAB_KEYS = ["quotation", "fees", "settings", "raw"];
+    const rowsEl = document.getElementById("lineRows");
+    const modal = document.getElementById("modalOverlay");
+    const modalTitle = document.getElementById("modalTitle");
 
     let editIndex = null;
-    let currentTab = "quotation";
-    let configSearch = "";
-    let configData = [];
     let lines = [
-      { role: "Project Manager (Lead)", nationality: "SAU", qty: 1, service: 48775.0 },
+      { role: "Project Manager", nationality: "SAU", qty: 1, service: 12000 },
       { role: "Maintenance Foreman", nationality: "IND", qty: 8, service: 6717.5 }
     ];
 
-    const el = {
-      lineRows: document.getElementById("lineRows"),
-      loadStatus: document.getElementById("loadStatus"),
-      modal: document.getElementById("modalOverlay"),
-      modalTitle: document.getElementById("modalTitle"),
-      modalMeta: document.getElementById("modalMeta"),
-      tabs: document.getElementById("tabs"),
-      tabPanel: document.getElementById("tabPanel"),
-      configSearch: document.getElementById("configSearch"),
-      downloadJsonBtn: document.getElementById("downloadJsonBtn"),
-      addLineBtn: document.getElementById("addLineBtn"),
-      closeModalBtn: document.getElementById("closeModalBtn"),
-      cancelBtn: document.getElementById("cancelBtn"),
-      saveBtn: document.getElementById("saveBtn"),
-      sumService: document.getElementById("sumService"),
-      sumVat: document.getElementById("sumVat"),
-      sumNet: document.getElementById("sumNet"),
-      sumTotal: document.getElementById("sumTotal"),
-      sumRecords: document.getElementById("sumRecords"),
-      sumFees: document.getElementById("sumFees"),
-      sumSettings: document.getElementById("sumSettings"),
+    const fields = {
       role: document.getElementById("role"),
       nationality: document.getElementById("nationality"),
       qty: document.getElementById("qty"),
-      contractType: document.getElementById("contractType"),
-      clientName: document.getElementById("clientName"),
-      projectName: document.getElementById("projectName"),
       baseSalary: document.getElementById("baseSalary"),
       allowance: document.getElementById("allowance"),
       overtime: document.getElementById("overtime"),
@@ -1107,703 +511,212 @@
       govFees: document.getElementById("govFees"),
       insurance: document.getElementById("insurance"),
       markup: document.getElementById("markup"),
-      discount: document.getElementById("discount"),
-      basicInfoDetails: document.getElementById("basicInfoDetails"),
-      basicInfoPreview: document.getElementById("basicInfoPreview"),
-      equationOverlay: document.getElementById("equationOverlay"),
-      equationCloseBtn: document.getElementById("equationCloseBtn"),
-      equationTitle: document.getElementById("equationTitle"),
-      equationContent: document.getElementById("equationContent")
+      discount: document.getElementById("discount")
     };
 
-    function toSAR(value) {
-      return `SAR ${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    }
+    const summary = {
+      service: document.getElementById("sumService"),
+      vat: document.getElementById("sumVat"),
+      net: document.getElementById("sumNet"),
+      total: document.getElementById("sumTotal")
+    };
+    const info = {
+      overlay: document.getElementById("infoOverlay"),
+      closeBtn: document.getElementById("infoCloseBtn"),
+      title: document.getElementById("infoTitle"),
+      body: document.getElementById("infoBody")
+    };
 
-    function esc(text) {
-      return String(text ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+    const formulaDetails = {
+      govFees: "=IF(F61=3,D4/F10,0)",
+      insurance: "=SWITCH(F36,2, ... ,0)",
+      markup: "=F51"
+    };
 
-    function normalizeItem(item = {}) {
-      return {
-        QuotationName: item.QuotationName ?? "",
-        QuotationValue: item.QuotationValue ?? "",
-        QuotationMapTo: item.QuotationMapTo ?? null,
-        TotalFeesName: item.TotalFeesName ?? "",
-        TotalFeesValue: item.TotalFeesValue ?? "",
-        GeneralSettingName: item.GeneralSettingName ?? "",
-        GeneralSettingValue: item.GeneralSettingValue ?? "",
-        QuotationIsEnabled: Boolean(item.QuotationIsEnabled),
-        QuotationIsVisible: item.QuotationIsVisible !== false,
-        QuotationEnabledForTeam: item.QuotationEnabledForTeam ?? null,
-        QuotationVisibleForTeam: item.QuotationVisibleForTeam ?? null,
-        TotalFeesIsEnabled: Boolean(item.TotalFeesIsEnabled),
-        TotalFeesIsVisible: item.TotalFeesIsVisible !== false,
-        TotalFeesEnabledForTeam: item.TotalFeesEnabledForTeam ?? null,
-        TotalFeesVisibleForTeam: item.TotalFeesVisibleForTeam ?? null
-      };
-    }
+    const formatSAR = n => `SAR ${Number(n).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
-    function smartParse(value) {
-      const raw = value.trim();
-      if (raw === "") return "";
-      if (raw === "null") return null;
-      if (raw === "true") return true;
-      if (raw === "false") return false;
-      const n = Number(raw);
-      return Number.isNaN(n) ? value : n;
-    }
-
-    async function loadConfigData() {
-      try {
-        const response = await fetch(DATASET_URL, { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const payload = await response.json();
-        if (!Array.isArray(payload)) throw new Error("JSON payload is not an array");
-        configData = payload.map(normalizeItem);
-        el.loadStatus.textContent = `Loaded ${configData.length} JSON records`;
-        el.loadStatus.style.background = "#ecfdf3";
-        el.loadStatus.style.color = "#067647";
-        el.loadStatus.style.borderColor = "#a6f4c5";
-      } catch (error) {
-        configData = [];
-        el.loadStatus.textContent = "Could not load JSON fields. Open using localhost server.";
-        el.loadStatus.style.background = "#fff1f1";
-        el.loadStatus.style.color = "#b42318";
-        el.loadStatus.style.borderColor = "#fecaca";
-        console.error("Failed to load JSON data:", error);
-      }
-      renderTabs();
-      renderCurrentTab();
-      updateSummary();
-    }
-
-    function calcServicePrice() {
-      const base = Number(el.baseSalary.value) || 0;
-      const allowance = Number(el.allowance.value) || 0;
-      const overtime = Number(el.overtime.value) || 0;
-      const otherCost = Number(el.otherCost.value) || 0;
-      const govFees = Number(el.govFees.value) || 0;
-      const insurance = Number(el.insurance.value) || 0;
-      const markup = (Number(el.markup.value) || 0) / 100;
-      const discount = (Number(el.discount.value) || 0) / 100;
-      const raw = base + allowance + overtime + otherCost + govFees + insurance;
-      return raw * (1 + markup) * (1 - discount);
+    function calcService() {
+      const base = +fields.baseSalary.value || 0;
+      const allowance = +fields.allowance.value || 0;
+      const overtime = +fields.overtime.value || 0;
+      const other = +fields.otherCost.value || 0;
+      const gov = +fields.govFees.value || 0;
+      const ins = +fields.insurance.value || 0;
+      const markup = (+fields.markup.value || 0) / 100;
+      const discount = (+fields.discount.value || 0) / 100;
+      const raw = base + allowance + overtime + other + gov + ins;
+      const withMarkup = raw * (1 + markup);
+      return withMarkup * (1 - discount);
     }
 
     function updateSummary() {
-      const service = calcServicePrice();
+      const service = calcService();
+      const qty = +fields.qty.value || 0;
       const vat = service * VAT_RATE;
-      const qty = Number(el.qty.value) || 0;
-      el.sumService.textContent = toSAR(service);
-      el.sumVat.textContent = toSAR(vat);
-      el.sumNet.textContent = toSAR(service + vat);
-      el.sumTotal.textContent = toSAR((service + vat) * qty);
-      el.sumRecords.textContent = String(configData.length);
-      el.sumFees.textContent = String(configData.filter((x) => String(x.TotalFeesName || "").trim()).length);
-      el.sumSettings.textContent = String(configData.filter((x) => String(x.GeneralSettingName || "").trim()).length);
-      updateBasicInfoPreview();
-    }
-
-    function updateBasicInfoPreview() {
-      if (!el.basicInfoPreview) return;
-      const role = (el.role?.value || "--").trim() || "--";
-      const nationality = (el.nationality?.value || "--").trim() || "--";
-      const qty = (el.qty?.value || "--").trim() || "--";
-      const contract = (el.contractType?.value || "--").trim() || "--";
-      el.basicInfoPreview.textContent = `Role: ${role} | Nationality: ${nationality} | Qty: ${qty} | Contract: ${contract}`;
+      const net = service + vat;
+      summary.service.textContent = formatSAR(service);
+      summary.vat.textContent = formatSAR(vat);
+      summary.net.textContent = formatSAR(net);
+      summary.total.textContent = formatSAR(net * qty);
     }
 
     function renderTable() {
-      el.lineRows.innerHTML = "";
+      rowsEl.innerHTML = "";
       lines.forEach((line, i) => {
         const vat = line.service * VAT_RATE;
         const net = line.service + vat;
-        const row = document.createElement("tr");
-        row.innerHTML = `
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
           <td>${i + 1}</td>
-          <td>${esc(line.role)}</td>
-          <td>${esc(line.nationality)}</td>
+          <td>${line.role}</td>
+          <td>${line.nationality}</td>
           <td>${line.qty}</td>
-          <td class="money">${toSAR(line.service)}</td>
-          <td>${toSAR(vat)}</td>
-          <td class="money">${toSAR(net * line.qty)}</td>
+          <td class="money">${formatSAR(line.service)}</td>
+          <td>${formatSAR(vat)}</td>
+          <td class="money">${formatSAR(net * line.qty)}</td>
           <td class="row-actions">
-            <button class="btn soft" type="button" data-action="edit" data-index="${i}">Edit</button>
-            <button class="btn danger" type="button" data-action="delete" data-index="${i}">Delete</button>
+            <button class="btn btn-ghost" onclick="openEdit(${i})">Edit</button>
+            <button class="btn btn-danger" onclick="removeLine(${i})">Delete</button>
           </td>
         `;
-        el.lineRows.appendChild(row);
+        rowsEl.appendChild(tr);
       });
     }
 
-    function openModal() {
-      el.modal.classList.add("show");
-    }
-
+    function openModal() { modal.classList.add("show"); }
     function closeModal() {
-      el.modal.classList.remove("show");
-      closeEquationPopup();
+      modal.classList.remove("show");
+      closeInfo();
       editIndex = null;
-      configSearch = "";
-      el.configSearch.value = "";
     }
 
-    function resetModalForm() {
-      el.role.value = "";
-      el.nationality.value = "SAU";
-      el.qty.value = 1;
-      el.contractType.value = "Monthly";
-      el.clientName.value = "Aramco";
-      el.projectName.value = "Master Client";
-      el.baseSalary.value = 5000;
-      el.allowance.value = 500;
-      el.overtime.value = 0;
-      el.otherCost.value = 0;
-      el.govFees.value = 200;
-      el.insurance.value = 150;
-      el.markup.value = 12;
-      el.discount.value = 0;
-      currentTab = "quotation";
-      if (el.basicInfoDetails) el.basicInfoDetails.removeAttribute("open");
-      renderTabs();
-      renderCurrentTab();
+    function showInfo(title, html) {
+      info.title.textContent = title;
+      info.body.innerHTML = html;
+      info.overlay.classList.add("show");
+    }
+
+    function closeInfo() {
+      info.overlay.classList.remove("show");
+    }
+
+    function showEquationInfo(fieldKey, label) {
+      const formula = formulaDetails[fieldKey] || "(No equation configured)";
+      const html = `
+        <table class="info-table">
+          <tr><th>Field</th><td>${label}</td></tr>
+          <tr><th>Equation</th><td class="mono">${formula}</td></tr>
+          <tr><th>How calculated</th><td>Final result is produced by your calculation engine after resolving cell/parameter references.</td></tr>
+          <tr><th>Display note</th><td>This popup explains formula source for users and approvers.</td></tr>
+        </table>
+      `;
+      showInfo(`Equation Details - ${label}`, html);
+    }
+
+    function resetForm() {
+      document.getElementById("lineForm").reset();
+      fields.qty.value = 1;
+      fields.baseSalary.value = 5000;
+      fields.allowance.value = 500;
+      fields.overtime.value = 0;
+      fields.otherCost.value = 0;
+      fields.govFees.value = 200;
+      fields.insurance.value = 150;
+      fields.markup.value = 12;
+      fields.discount.value = 0;
       updateSummary();
     }
 
     function openAdd() {
+      modalTitle.textContent = "Add New Line";
       editIndex = null;
-      el.modalTitle.textContent = "Add New Line";
-      el.modalMeta.textContent = "Basic Info + Summary + grouped parameter tabs";
-      resetModalForm();
+      resetForm();
       openModal();
     }
 
-    function openEdit(index) {
+    window.openEdit = function(index) {
       const line = lines[index];
-      if (!line) return;
       editIndex = index;
-      el.modalTitle.textContent = `Edit Line #${index + 1}`;
-      el.modalMeta.textContent = `${line.role} - ${line.nationality}`;
-      resetModalForm();
-      el.role.value = line.role;
-      el.nationality.value = line.nationality;
-      el.qty.value = line.qty;
-      el.baseSalary.value = (line.service * 0.72).toFixed(2);
-      el.allowance.value = (line.service * 0.1).toFixed(2);
-      el.overtime.value = (line.service * 0.06).toFixed(2);
-      el.otherCost.value = (line.service * 0.03).toFixed(2);
-      el.govFees.value = (line.service * 0.05).toFixed(2);
-      el.insurance.value = (line.service * 0.04).toFixed(2);
-      el.markup.value = 8;
-      el.discount.value = 0;
+      modalTitle.textContent = `Edit Line #${index + 1}`;
+      resetForm();
+      fields.role.value = line.role;
+      fields.nationality.value = line.nationality;
+      fields.qty.value = line.qty;
+      fields.baseSalary.value = (line.service * 0.7).toFixed(2);
+      fields.allowance.value = (line.service * 0.1).toFixed(2);
+      fields.overtime.value = (line.service * 0.05).toFixed(2);
+      fields.otherCost.value = (line.service * 0.05).toFixed(2);
+      fields.govFees.value = (line.service * 0.05).toFixed(2);
+      fields.insurance.value = (line.service * 0.05).toFixed(2);
+      fields.markup.value = 8;
+      fields.discount.value = 0;
       updateSummary();
       openModal();
-    }
+    };
+
+    window.removeLine = function(index) {
+      if (!confirm("Delete this line?")) return;
+      lines.splice(index, 1);
+      renderTable();
+    };
 
     function saveLine() {
-      const role = el.role.value.trim();
-      if (!role) {
+      if (!fields.role.value.trim()) {
         alert("Role / Position is required.");
         return;
       }
+
       const item = {
-        role,
-        nationality: el.nationality.value,
-        qty: Math.max(1, Number(el.qty.value) || 1),
-        service: calcServicePrice()
+        role: fields.role.value.trim(),
+        nationality: fields.nationality.value,
+        qty: +fields.qty.value || 1,
+        service: calcService()
       };
+
       if (editIndex === null) lines.push(item);
       else lines[editIndex] = item;
+
       renderTable();
       closeModal();
     }
 
-    function removeLine(index) {
-      if (!Number.isInteger(index) || !lines[index]) return;
-      if (!confirm("Delete this line?")) return;
-      lines.splice(index, 1);
-      renderTable();
-    }
-
-    function filterEntriesBySearch(entries, tabKey) {
-      const needle = configSearch.trim().toLowerCase();
-      if (!needle) return entries;
-      return entries.filter(({ item }) => {
-        if (tabKey === "quotation") {
-          const text = [
-            item.QuotationName,
-            item.QuotationValue,
-            item.QuotationMapTo,
-            item.QuotationEnabledForTeam,
-            item.QuotationVisibleForTeam
-          ].join(" ").toLowerCase();
-          return text.includes(needle);
-        }
-        if (tabKey === "fees") {
-          const text = [
-            item.QuotationName,
-            item.TotalFeesName,
-            item.TotalFeesValue,
-            item.TotalFeesEnabledForTeam,
-            item.TotalFeesVisibleForTeam
-          ].join(" ").toLowerCase();
-          return text.includes(needle);
-        }
-        if (tabKey === "settings") {
-          const text = [
-            item.QuotationName,
-            item.GeneralSettingName,
-            item.GeneralSettingValue
-          ].join(" ").toLowerCase();
-          return text.includes(needle);
-        }
-        return JSON.stringify(item).toLowerCase().includes(needle);
-      });
-    }
-
-    function hydratePanelValues() {
-      const controls = el.tabPanel.querySelectorAll("[data-idx][data-field]");
-      controls.forEach((control) => {
-        const idx = Number(control.dataset.idx);
-        const field = control.dataset.field;
-        if (Number.isNaN(idx) || !field || !configData[idx]) return;
-        const value = configData[idx][field];
-        if (control.type === "checkbox") {
-          control.checked = Boolean(value);
-        } else {
-          control.value = value === null || value === undefined ? "" : String(value);
-        }
-      });
-    }
-
-    function estimateFormulaResult(formula) {
-      const text = String(formula || "").trim();
-      if (!text) return null;
-      const expression = text.startsWith("=") ? text.slice(1) : text;
-      const safe = expression.replaceAll(/\s+/g, "");
-      if (!/^[0-9+\-*/().]+$/.test(safe)) return null;
-      try {
-        const result = Function(`"use strict"; return (${safe});`)();
-        return Number.isFinite(result) ? result : null;
-      } catch {
-        return null;
+    document.getElementById("addLineBtn").addEventListener("click", openAdd);
+    document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+    document.getElementById("cancelBtn").addEventListener("click", closeModal);
+    document.getElementById("saveBtn").addEventListener("click", saveLine);
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+    info.closeBtn.addEventListener("click", closeInfo);
+    info.overlay.addEventListener("click", (e) => { if (e.target === info.overlay) closeInfo(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        if (info.overlay.classList.contains("show")) closeInfo();
+        else if (modal.classList.contains("show")) closeModal();
       }
-    }
+    });
 
-    function normalizeFormulaDisplay(rawFormula) {
-      const text = String(rawFormula || "").trim();
-      if (!text) return "(empty)";
-      return text;
-    }
+    Object.values(fields).forEach(el => el.addEventListener("input", updateSummary));
 
-    function extractReferences(formulaText) {
-      const refs = String(formulaText || "").match(/[A-Za-z]+\d+/g);
-      return refs ? Array.from(new Set(refs)) : [];
-    }
-
-    function deterministicDemoResult(seedText) {
-      const text = String(seedText || "");
-      let hash = 0;
-      for (let i = 0; i < text.length; i += 1) {
-        hash = ((hash << 5) - hash) + text.charCodeAt(i);
-        hash |= 0;
-      }
-      const normalized = Math.abs(hash % 9000) + 1000;
-      return Number((normalized + 0.75).toFixed(2));
-    }
-
-    function parseMapPairs(text) {
-      const source = String(text || "").trim();
-      if (!source.includes(":")) return [];
-      const chunks = source.split(/[\n;,]+/).map((x) => x.trim()).filter(Boolean);
-      return chunks
-        .map((part) => {
-          const sep = part.indexOf(":");
-          if (sep === -1) return null;
-          const key = part.slice(0, sep).trim();
-          const value = part.slice(sep + 1).trim();
-          if (!key || !value) return null;
-          return { key, value };
-        })
-        .filter(Boolean);
-    }
-
-    function closeEquationPopup() {
-      if (!el.equationOverlay) return;
-      el.equationOverlay.classList.remove("show");
-    }
-
-    function openEquationPopup(title, html) {
-      if (!el.equationOverlay) return;
-      el.equationTitle.textContent = title;
-      el.equationContent.innerHTML = html;
-      el.equationOverlay.classList.add("show");
-    }
-
-    function showFormulaInfo(idx) {
-      const row = configData[idx];
-      if (!row) return;
-      const formula = normalizeFormulaDisplay(row.QuotationValue);
-      const result = estimateFormulaResult(formula);
-      const refs = extractReferences(formula);
-      const mappedPairs = parseMapPairs(formula);
-      const demoMode = result === null;
-      const displayedResult = demoMode ? deterministicDemoResult(`${row.QuotationName}|${formula}`) : result;
-      const resultDisplay = String(displayedResult);
-      const refsDisplay = refs.length ? refs.join(", ") : "No direct cell references";
-      const steps = result !== null
-        ? [
-            "1) Remove '=' prefix if exists.",
-            "2) Evaluate arithmetic expression (+, -, *, /, parentheses).",
-            `3) Final result = ${resultDisplay}.`
-          ]
-        : [
-            "1) Equation has references/non-numeric tokens so exact evaluation is deferred.",
-            "2) For demo display, a deterministic random value is generated from equation text.",
-            `3) Demo display result = ${resultDisplay}. (replace later with real engine output)`
-          ];
-
-      const pairsHtml = mappedPairs.length
-        ? `
-          <div>
-            <div class="hint" style="margin-bottom:6px;">Parsed key:value pairs</div>
-            <div class="kv-list">
-              ${mappedPairs.map((pair) => `
-                <div class="kv-row">
-                  <div class="kv-key">${esc(pair.key)}</div>
-                  <div class="kv-val">${esc(pair.value)}</div>
-                </div>
-              `).join("")}
-            </div>
-          </div>
-        `
-        : "";
-
-      const html = `
-        <table class="info-table">
-          <tr><th>Quotation</th><td>${esc(row.QuotationName || "(Unnamed quotation)")}</td></tr>
-          <tr><th>Equation</th><td class="mono">${esc(formula)}</td></tr>
-          <tr><th>Current Result</th><td><strong>${esc(resultDisplay)}</strong></td></tr>
-          <tr><th>Display Mode</th><td>${demoMode ? "Demo (deterministic random)" : "Calculated from numeric equation"}</td></tr>
-          <tr><th>References</th><td>${esc(refsDisplay)}</td></tr>
-        </table>
-        ${pairsHtml}
-        <div>
-          <div class="hint" style="margin-bottom:6px;">How this is calculated</div>
-          <div class="kv-list">
-            ${steps.map((step, index) => `
-              <div class="kv-row">
-                <div class="kv-key">Step ${index + 1}</div>
-                <div class="kv-val" style="text-align:left; font-weight:600;">${esc(step)}</div>
-              </div>
-            `).join("")}
-          </div>
-        </div>
-      `;
-
-      openEquationPopup(`Equation Details - ${row.QuotationName || "Quotation"}`, html);
-    }
-
-    function renderTabs() {
-      const counts = {
-        quotation: configData.length,
-        fees: configData.filter((x) => String(x.TotalFeesName || "").trim()).length,
-        settings: configData.filter((x) => String(x.GeneralSettingName || "").trim()).length,
-        raw: configData.length
-      };
-      el.tabs.innerHTML = "";
-      [
-        { key: "quotation", label: `Quotation Fields (${counts.quotation})` },
-        { key: "fees", label: `Total Fees (${counts.fees})` },
-        { key: "settings", label: `General Settings (${counts.settings})` },
-        { key: "raw", label: "Raw JSON" }
-      ].forEach((tab) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = `tab-btn ${tab.key === currentTab ? "active" : ""}`;
-        btn.textContent = tab.label;
-        btn.dataset.tab = tab.key;
-        el.tabs.appendChild(btn);
-      });
-    }
-
-    function renderGroup(title, items, renderer) {
-      if (!items.length) {
-        return `
-          <section class="config-group">
-            <div class="group-head"><span>${esc(title)}</span><span class="pill">0</span></div>
-            <div class="param-row"><div class="empty">No records in this group</div></div>
-          </section>
-        `;
-      }
-      return `
-        <section class="config-group">
-          <div class="group-head"><span>${esc(title)}</span><span class="pill">${items.length}</span></div>
-          ${items.map(renderer).join("")}
-        </section>
-      `;
-    }
-
-    function quotationRow(item, idx) {
-      return `
-        <details class="param-row">
-          <summary class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.QuotationName || "(Unnamed quotation)")}</strong></summary>
-          <div class="param-body">
-          <div class="param-grid">
-            <div><label>Quotation Name</label><input data-idx="${idx}" data-field="QuotationName" /></div>
-            <div class="wide formula">
-              <label>Quotation Value (Formula / Number)</label>
-              <div class="formula-read">
-                <span class="formula-text hidden">Hidden for cleaner UI</span>
-                <button type="button" class="sar-icon-btn" data-action="formula-info" data-idx="${idx}" title="Show SAR equation details" aria-label="Show SAR equation details">
-                  <span class="sar-glyph">ر.س</span>
-                </button>
-              </div>
-              <input data-idx="${idx}" data-field="QuotationValue" style="display:none;" />
-              <div class="hint">Use the SAR icon to open equation details.</div>
-            </div>
-          </div>
-          <details class="inline-config">
-            <summary>Configuration</summary>
-            <div class="param-grid">
-              <div><label>Map To</label><input data-idx="${idx}" data-field="QuotationMapTo" placeholder="new_fieldname" /></div>
-              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsEnabled" /><span>Enabled</span></label>
-              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="QuotationIsVisible" /><span>Visible</span></label>
-              <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="QuotationEnabledForTeam" placeholder="team guid" /></div>
-              <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="QuotationVisibleForTeam" placeholder="team guid" /></div>
-            </div>
-          </details>
-          </div>
-        </details>
-      `;
-    }
-
-    function feesRow(item, idx) {
-      return `
-        <details class="param-row">
-          <summary class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.TotalFeesName || "(No TotalFeesName)")}</strong><span>- ${esc(item.QuotationName)}</span></summary>
-          <div class="param-body">
-          <div class="param-grid">
-            <div><label>Total Fees Name</label><input data-idx="${idx}" data-field="TotalFeesName" /></div>
-            <div class="numeric"><label>Total Fees Value</label><input data-idx="${idx}" data-field="TotalFeesValue" /></div>
-          </div>
-          <details class="inline-config">
-            <summary>Configuration</summary>
-            <div class="param-grid">
-              <div><label>Related Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
-              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsEnabled" /><span>Enabled</span></label>
-              <label class="check"><input type="checkbox" data-idx="${idx}" data-field="TotalFeesIsVisible" /><span>Visible</span></label>
-              <div class="guid"><label>Enabled For Team</label><input data-idx="${idx}" data-field="TotalFeesEnabledForTeam" placeholder="team guid" /></div>
-              <div class="guid"><label>Visible For Team</label><input data-idx="${idx}" data-field="TotalFeesVisibleForTeam" placeholder="team guid" /></div>
-            </div>
-          </details>
-          </div>
-        </details>
-      `;
-    }
-
-    function settingsRow(item, idx) {
-      return `
-        <details class="param-row">
-          <summary class="param-title"><span class="idx">#${idx + 1}</span><strong>${esc(item.GeneralSettingName || "(No setting name)")}</strong><span>- ${esc(item.QuotationName)}</span></summary>
-          <div class="param-body">
-          <div class="param-grid">
-            <div><label>General Setting Name</label><input data-idx="${idx}" data-field="GeneralSettingName" /></div>
-            <div class="wide"><label>General Setting Value</label><input data-idx="${idx}" data-field="GeneralSettingValue" placeholder="number / text / true / false" /></div>
-          </div>
-          <details class="inline-config">
-            <summary>Configuration</summary>
-            <div class="param-grid">
-              <div><label>Linked Quotation</label><input value="${esc(item.QuotationName)}" disabled /></div>
-            </div>
-          </details>
-          </div>
-        </details>
-      `;
-    }
-
-    function renderCurrentTab() {
-      if (currentTab === "raw") {
-        const filtered = filterEntriesBySearch(
-          configData.map((item, idx) => ({ item, idx })),
-          "raw"
-        ).map((x) => x.item);
-        el.tabPanel.innerHTML = `
-          <div class="group-head" style="border-radius: 10px;">
-            <span>Raw JSON preview</span><span class="pill">${filtered.length} records</span>
-          </div>
-          <pre class="raw">${esc(JSON.stringify(filtered, null, 2))}</pre>
-        `;
-        return;
-      }
-
-      if (!configData.length) {
-        el.tabPanel.innerHTML = `<div class="empty">No JSON records found. Ensure <code>quotation-fees-and-settings.json</code> exists and is valid.</div>`;
-        return;
-      }
-
-      if (currentTab === "quotation") {
-        const filtered = filterEntriesBySearch(
-          configData.map((item, idx) => ({ item, idx })),
-          "quotation"
-        );
-        const mapped = filtered.filter((x) => String(x.item.QuotationMapTo || "").trim());
-        const unmapped = filtered.filter((x) => !String(x.item.QuotationMapTo || "").trim());
-        el.tabPanel.innerHTML =
-          renderGroup("Mapped Quotation Fields", mapped, ({ item, idx }) => quotationRow(item, idx)) +
-          renderGroup("Unmapped Quotation Fields", unmapped, ({ item, idx }) => quotationRow(item, idx));
-        hydratePanelValues();
-        return;
-      }
-
-      if (currentTab === "fees") {
-        const filtered = filterEntriesBySearch(
-          configData.map((item, idx) => ({ item, idx })),
-          "fees"
-        );
-        const configured = filtered.filter((x) => String(x.item.TotalFeesName || "").trim());
-        const emptyFees = filtered.filter((x) => !String(x.item.TotalFeesName || "").trim());
-        el.tabPanel.innerHTML =
-          renderGroup("Configured Total Fees", configured, ({ item, idx }) => feesRow(item, idx)) +
-          renderGroup("Without Total Fees Name", emptyFees, ({ item, idx }) => feesRow(item, idx));
-        hydratePanelValues();
-        return;
-      }
-
-      if (currentTab === "settings") {
-        const filtered = filterEntriesBySearch(
-          configData.map((item, idx) => ({ item, idx })),
-          "settings"
-        );
-        const configured = filtered.filter((x) => String(x.item.GeneralSettingName || "").trim());
-        const emptySettings = filtered.filter((x) => !String(x.item.GeneralSettingName || "").trim());
-        el.tabPanel.innerHTML =
-          renderGroup("Configured General Settings", configured, ({ item, idx }) => settingsRow(item, idx)) +
-          renderGroup("Without General Setting Name", emptySettings, ({ item, idx }) => settingsRow(item, idx));
-        hydratePanelValues();
-        return;
-      }
-
-      el.tabPanel.innerHTML = `<div class="empty">Unsupported tab</div>`;
-    }
-
-    function downloadJSON() {
-      const blob = new Blob([JSON.stringify(configData, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "quotation-fees-and-settings.updated.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function attachEvents() {
-      el.addLineBtn.addEventListener("click", openAdd);
-      el.closeModalBtn.addEventListener("click", closeModal);
-      el.cancelBtn.addEventListener("click", closeModal);
-      el.saveBtn.addEventListener("click", saveLine);
-      el.downloadJsonBtn.addEventListener("click", downloadJSON);
-      if (el.compactModeToggle) {
-        el.compactModeToggle.addEventListener("change", () => {
-          document.body.classList.toggle("compact-mode", el.compactModeToggle.checked);
-        });
-      }
-      if (el.equationCloseBtn) {
-        el.equationCloseBtn.addEventListener("click", closeEquationPopup);
-      }
-      if (el.equationOverlay) {
-        el.equationOverlay.addEventListener("click", (event) => {
-          if (event.target === el.equationOverlay) closeEquationPopup();
-        });
-      }
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-          if (el.equationOverlay && el.equationOverlay.classList.contains("show")) {
-            closeEquationPopup();
-            return;
-          }
-          if (el.modal && el.modal.classList.contains("show")) closeModal();
-        }
-      });
-
-      el.modal.addEventListener("click", (event) => {
-        if (event.target === el.modal) closeModal();
-      });
-
-      [
-        el.role, el.nationality, el.contractType,
-        el.clientName, el.projectName,
-        el.qty, el.baseSalary, el.allowance, el.overtime,
-        el.otherCost, el.govFees, el.insurance, el.markup, el.discount
-      ].forEach((input) => input.addEventListener("input", updateSummary));
-      [el.role, el.nationality, el.contractType].forEach((input) => {
-        if (input) input.addEventListener("input", updateSummary);
-        if (input) input.addEventListener("change", updateSummary);
-      });
-
-      el.tabs.addEventListener("click", (event) => {
-        const tab = event.target.dataset.tab;
-        if (!TAB_KEYS.includes(tab)) return;
-        currentTab = tab;
-        renderTabs();
-        renderCurrentTab();
-      });
-
-      el.configSearch.addEventListener("input", (event) => {
-        configSearch = event.target.value || "";
-        renderCurrentTab();
-      });
-
-      el.lineRows.addEventListener("click", (event) => {
-        const btn = event.target.closest("button");
-        if (!btn) return;
-        const action = btn.dataset.action;
-        const index = Number(btn.dataset.index);
-        if (action === "edit") openEdit(index);
-        if (action === "delete") removeLine(index);
-      });
-
-      el.tabPanel.addEventListener("input", (event) => {
-        const target = event.target;
-        const idx = Number(target.dataset.idx);
-        const field = target.dataset.field;
-        if (!field || Number.isNaN(idx) || !configData[idx]) return;
-        if (target.type === "checkbox") {
-          configData[idx][field] = target.checked;
-        } else if (field === "GeneralSettingValue") {
-          configData[idx][field] = smartParse(target.value);
-        } else if (field === "TotalFeesValue") {
-          configData[idx][field] = smartParse(target.value);
-        } else if (field.includes("Team") || field === "QuotationMapTo") {
-          configData[idx][field] = target.value.trim() === "" ? null : target.value;
-        } else {
-          configData[idx][field] = target.value;
-        }
-        renderTabs();
-        updateSummary();
-      });
-
-      el.tabPanel.addEventListener("click", (event) => {
-        const button = event.target.closest("button[data-action='formula-info']");
-        if (!button) return;
-        const idx = Number(button.dataset.idx);
-        if (Number.isNaN(idx)) return;
-        showFormulaInfo(idx);
-      });
-    }
+    [
+      { id: "govFees", label: "Gov Fees" },
+      { id: "insurance", label: "Insurance" },
+      { id: "markup", label: "Markup (%)" }
+    ].forEach(({ id, label }) => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      const wrap = document.createElement("div");
+      wrap.className = "formula-inline";
+      input.parentNode.insertBefore(wrap, input);
+      wrap.appendChild(input);
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "icon-btn";
+      btn.textContent = "i";
+      btn.title = `Info for ${label}`;
+      btn.addEventListener("click", () => showEquationInfo(id, label));
+      wrap.appendChild(btn);
+    });
 
     renderTable();
-    attachEvents();
-    updateSummary();
-    loadConfigData();
   </script>
 </body>
 </html>
