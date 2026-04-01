@@ -193,8 +193,73 @@
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(170px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .group-label {
+      grid-column: 1 / -1;
+      font-size: 13px;
+      font-weight: 800;
+      color: #2a4674;
+      border-top: 1px solid #e4ebf7;
+      padding-top: 8px;
+      margin-top: 2px;
+    }
+    .group-label:first-child {
+      border-top: 0;
+      padding-top: 0;
+      margin-top: 0;
+    }
+    .field {
+      border: 1px solid #e2e9f5;
+      border-radius: 12px;
+      background: #f8fbff;
+      padding: 10px;
+    }
+    .field input,
+    .field select {
+      min-height: 42px;
+      font-size: 14px;
+      font-weight: 700;
+      background: #fff;
+      border-color: #d4deee;
+    }
+    .field.amount {
+      padding-bottom: 9px;
+    }
+    .amount-shell {
+      display: flex;
+      align-items: center;
+      border: 1px solid #d4deee;
+      border-radius: 10px;
+      min-height: 42px;
+      background: #fff;
+      padding: 0 10px;
+      transition: box-shadow .2s ease, border-color .2s ease;
+    }
+    .amount-prefix {
+      color: #98a5b8;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      margin-right: 8px;
+    }
+    .amount-shell input {
+      border: 0;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+      min-height: 36px;
+      font-variant-numeric: tabular-nums;
+      color: #1f2f47;
+    }
+    .amount-shell input:focus {
+      box-shadow: none;
+      border: 0;
+    }
+    .amount-shell:focus-within {
+      border-color: #7ea4ff;
+      box-shadow: 0 0 0 3px rgba(47, 111, 235, 0.14);
     }
 
     label {
@@ -728,11 +793,12 @@
             <h3>Basic Info</h3>
             <div id="mandatoryBanner" class="ok">Ready to save. Mandatory fields are complete.</div>
             <div class="form-grid">
-              <div>
+              <div class="group-label">1. Line Info</div>
+              <div class="field">
                 <label for="role" class="required">Role / Position</label>
                 <input id="role" required />
               </div>
-              <div>
+              <div class="field">
                 <label for="nationality" class="required">Nationality</label>
                 <select id="nationality">
                   <option>SAU</option>
@@ -742,11 +808,11 @@
                   <option>PHL</option>
                 </select>
               </div>
-              <div>
+              <div class="field">
                 <label for="qty" class="required">Quantity</label>
                 <input id="qty" type="number" min="1" value="1" />
               </div>
-              <div>
+              <div class="field">
                 <label for="contractType" class="required">Contract Type</label>
                 <select id="contractType">
                   <option>Monthly</option>
@@ -754,43 +820,62 @@
                   <option>Project Based</option>
                 </select>
               </div>
-              <div>
+              <div class="field">
                 <label for="clientName">Client</label>
                 <input id="clientName" value="Aramco" />
               </div>
-              <div>
+              <div class="field">
                 <label for="projectName">Project</label>
                 <input id="projectName" value="Master Client" />
               </div>
-              <div>
+              <div class="group-label">2. Compensation &amp; Allowances</div>
+              <div class="field amount">
                 <label for="baseSalary" class="required">Base Salary</label>
-                <input id="baseSalary" class="is-mandatory-phl" type="number" step="0.01" value="5000" />
+                <div class="amount-shell">
+                  <span class="amount-prefix">SAR</span>
+                  <input id="baseSalary" class="is-mandatory-phl" type="number" step="0.01" value="5000" />
+                </div>
               </div>
-              <div>
+              <div class="field amount">
                 <label for="allowance" class="required">Allowance</label>
-                <input id="allowance" class="is-mandatory-phl" type="number" step="0.01" value="500" />
+                <div class="amount-shell">
+                  <span class="amount-prefix">SAR</span>
+                  <input id="allowance" class="is-mandatory-phl" type="number" step="0.01" value="500" />
+                </div>
               </div>
-              <div>
+              <div class="field amount">
                 <label for="overtime">Overtime</label>
-                <input id="overtime" type="number" step="0.01" value="0" />
+                <div class="amount-shell">
+                  <span class="amount-prefix">SAR</span>
+                  <input id="overtime" type="number" step="0.01" value="0" />
+                </div>
               </div>
-              <div>
+              <div class="field amount">
                 <label for="otherCost">Other Cost</label>
-                <input id="otherCost" type="number" step="0.01" value="0" />
+                <div class="amount-shell">
+                  <span class="amount-prefix">SAR</span>
+                  <input id="otherCost" type="number" step="0.01" value="0" />
+                </div>
               </div>
-              <div>
+              <div class="field amount">
                 <label for="govFees">Gov. Fees</label>
-                <input id="govFees" class="is-mandatory-phl" type="number" step="0.01" value="200" />
+                <div class="amount-shell">
+                  <span class="amount-prefix">SAR</span>
+                  <input id="govFees" class="is-mandatory-phl" type="number" step="0.01" value="200" />
+                </div>
               </div>
-              <div>
+              <div class="field amount">
                 <label for="insurance">Insurance</label>
-                <input id="insurance" class="is-mandatory-phl" type="number" step="0.01" value="150" />
+                <div class="amount-shell">
+                  <span class="amount-prefix">SAR</span>
+                  <input id="insurance" class="is-mandatory-phl" type="number" step="0.01" value="150" />
+                </div>
               </div>
-              <div>
+              <div class="field">
                 <label for="markup">Markup (%)</label>
                 <input id="markup" type="number" step="0.01" value="12" />
               </div>
-              <div>
+              <div class="field">
                 <label for="discount">Discount (%)</label>
                 <input id="discount" type="number" step="0.01" value="0" />
               </div>
