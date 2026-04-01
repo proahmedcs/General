@@ -292,27 +292,73 @@
 
     .summary-grid {
       display: grid;
-      gap: 7px;
+      gap: 6px;
     }
     .metric {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px dashed #cad7ee;
-      padding-bottom: 7px;
-      font-size: 13px;
+      padding: 4px 0;
+      font-size: 12px;
     }
-    .metric strong { color: #102748; }
+    .metric strong { color: #102748; font-size: 12px; }
+
+    .basic-collapsible {
+      border: 1px solid #dbe5f6;
+      border-radius: 12px;
+      background: #fcfdff;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .basic-collapsible > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #234172;
+      background: #f4f8ff;
+      border-bottom: 1px solid #dbe5f6;
+    }
+    .basic-collapsible > summary::-webkit-details-marker { display: none; }
+    .basic-collapsible > summary::after {
+      content: "Show";
+      font-size: 11px;
+      color: #4f6d99;
+      border: 1px solid #cad9f2;
+      background: #fff;
+      border-radius: 999px;
+      padding: 2px 8px;
+    }
+    .basic-collapsible[open] > summary::after { content: "Hide"; }
+    .basic-summary-line {
+      font-size: 12px;
+      color: #4f6689;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 70%;
+    }
 
     .section-head {
+      position: sticky;
+      top: 64px;
+      z-index: 5;
       border: 1px solid var(--line);
       border-radius: 12px;
-      background: #fbfdff;
-      padding: 10px;
+      background: #ffffff;
+      padding: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      box-shadow: 0 8px 20px rgba(17, 35, 63, 0.08);
     }
     .tools-row {
       display: flex;
@@ -340,18 +386,33 @@
 
     .tabs {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .tabs-main {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .tabs-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #5b6f8e;
+      margin-bottom: 6px;
+      letter-spacing: .2px;
+      text-transform: uppercase;
     }
     .tab-btn {
       border: 1px solid #cbd8ee;
       background: #fff;
       color: #2e4b83;
-      border-radius: 9px;
-      padding: 8px 10px;
+      border-radius: 999px;
+      padding: 7px 12px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
     }
     .tab-btn.active {
       background: #e9f1ff;
@@ -480,9 +541,39 @@
       flex: 0 0 auto;
       line-height: 1;
     }
+    .info-btn .sar-mark {
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1;
+      transform: translateY(-0.5px);
+      display: inline-block;
+    }
     .info-btn:hover {
       background: #dfeeff;
       border-color: #99b7eb;
+    }
+    .sar-icon-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #bfd1ee;
+      border-radius: 999px;
+      background: #eef5ff;
+      color: #1f4ea2;
+      cursor: pointer;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .sar-icon-btn:hover {
+      background: #dfeeff;
+      border-color: #99b7eb;
+    }
+    .sar-icon-btn .sar-glyph {
+      font-size: 14px;
+      font-weight: 900;
     }
     .info-overlay {
       position: fixed;
@@ -571,22 +662,9 @@
     .formula-read {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       gap: 6px;
-      border: 1px solid #ccd7e8;
-      border-radius: 9px;
-      padding: 6px 7px;
-      background: #fff;
       min-height: 34px;
-    }
-    .formula-text {
-      flex: 1 1 auto;
-      min-width: 0;
-      color: #1a325d;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .param-grid .numeric input {
       max-width: 150px;
@@ -640,6 +718,50 @@
       color: #5f7392;
       font-size: 11px;
       font-weight: 700;
+    }
+    .basic-info-details {
+      border: 1px solid #dce7f8;
+      border-radius: 12px;
+      background: #fbfdff;
+      overflow: hidden;
+    }
+    .basic-info-summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #f3f7ff;
+      border-bottom: 1px solid #dce7f8;
+      cursor: pointer;
+    }
+    .basic-info-summary::-webkit-details-marker { display: none; }
+    .basic-info-title-wrap {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+    .basic-info-title-wrap h3 {
+      margin: 0;
+    }
+    .basic-info-preview {
+      font-size: 12px;
+      color: #35517e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 640px;
+    }
+    .summary-pill {
+      border: 1px solid #bed1f0;
+      background: #fff;
+      color: #1f4a92;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
     }
     details.inline-config {
       margin-top: 8px;
@@ -790,9 +912,16 @@
       <div class="modal-content">
         <div class="top-grid">
           <section class="card">
-            <h3>Basic Info</h3>
-            <div id="mandatoryBanner" class="ok">Ready to save. Mandatory fields are complete.</div>
-            <div class="form-grid">
+            <details id="basicInfoDetails" class="basic-info-details">
+              <summary class="basic-info-summary">
+                <div class="basic-info-title-wrap">
+                  <h3>Basic Info</h3>
+                  <span id="basicInfoPreview" class="basic-info-preview">Role: -- | Nationality: -- | Qty: -- | Contract: --</span>
+                </div>
+                <span class="summary-pill">Edit</span>
+              </summary>
+              <div id="mandatoryBanner" class="ok">Ready to save. Mandatory fields are complete.</div>
+              <div class="form-grid">
               <div class="group-label">1. Line Info</div>
               <div class="field">
                 <label for="role" class="required">Role / Position</label>
@@ -879,7 +1008,8 @@
                 <label for="discount">Discount (%)</label>
                 <input id="discount" type="number" step="0.01" value="0" />
               </div>
-            </div>
+              </div>
+            </details>
           </section>
 
           <aside class="card">
@@ -978,6 +1108,8 @@
       insurance: document.getElementById("insurance"),
       markup: document.getElementById("markup"),
       discount: document.getElementById("discount"),
+      basicInfoDetails: document.getElementById("basicInfoDetails"),
+      basicInfoPreview: document.getElementById("basicInfoPreview"),
       equationOverlay: document.getElementById("equationOverlay"),
       equationCloseBtn: document.getElementById("equationCloseBtn"),
       equationTitle: document.getElementById("equationTitle"),
@@ -1075,6 +1207,16 @@
       el.sumRecords.textContent = String(configData.length);
       el.sumFees.textContent = String(configData.filter((x) => String(x.TotalFeesName || "").trim()).length);
       el.sumSettings.textContent = String(configData.filter((x) => String(x.GeneralSettingName || "").trim()).length);
+      updateBasicInfoPreview();
+    }
+
+    function updateBasicInfoPreview() {
+      if (!el.basicInfoPreview) return;
+      const role = (el.role?.value || "--").trim() || "--";
+      const nationality = (el.nationality?.value || "--").trim() || "--";
+      const qty = (el.qty?.value || "--").trim() || "--";
+      const contract = (el.contractType?.value || "--").trim() || "--";
+      el.basicInfoPreview.textContent = `Role: ${role} | Nationality: ${nationality} | Qty: ${qty} | Contract: ${contract}`;
     }
 
     function renderTable() {
@@ -1128,6 +1270,7 @@
       el.markup.value = 12;
       el.discount.value = 0;
       currentTab = "quotation";
+      if (el.basicInfoDetails) el.basicInfoDetails.removeAttribute("open");
       renderTabs();
       renderCurrentTab();
       updateSummary();
@@ -1264,6 +1407,17 @@
       return refs ? Array.from(new Set(refs)) : [];
     }
 
+    function deterministicDemoResult(seedText) {
+      const text = String(seedText || "");
+      let hash = 0;
+      for (let i = 0; i < text.length; i += 1) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(i);
+        hash |= 0;
+      }
+      const normalized = Math.abs(hash % 9000) + 1000;
+      return Number((normalized + 0.75).toFixed(2));
+    }
+
     function parseMapPairs(text) {
       const source = String(text || "").trim();
       if (!source.includes(":")) return [];
@@ -1299,8 +1453,9 @@
       const result = estimateFormulaResult(formula);
       const refs = extractReferences(formula);
       const mappedPairs = parseMapPairs(formula);
-
-      const resultDisplay = result === null ? "Dynamic / resolved by engine" : String(result);
+      const demoMode = result === null;
+      const displayedResult = demoMode ? deterministicDemoResult(`${row.QuotationName}|${formula}`) : result;
+      const resultDisplay = String(displayedResult);
       const refsDisplay = refs.length ? refs.join(", ") : "No direct cell references";
       const steps = result !== null
         ? [
@@ -1309,9 +1464,9 @@
             `3) Final result = ${resultDisplay}.`
           ]
         : [
-            "1) Read equation text exactly as configured.",
-            "2) Resolve each referenced field/cell in your JS calculation engine.",
-            "3) Apply formula operators/functions to get final result."
+            "1) Equation has references/non-numeric tokens so exact evaluation is deferred.",
+            "2) For demo display, a deterministic random value is generated from equation text.",
+            `3) Demo display result = ${resultDisplay}. (replace later with real engine output)`
           ];
 
       const pairsHtml = mappedPairs.length
@@ -1335,6 +1490,7 @@
           <tr><th>Quotation</th><td>${esc(row.QuotationName || "(Unnamed quotation)")}</td></tr>
           <tr><th>Equation</th><td class="mono">${esc(formula)}</td></tr>
           <tr><th>Current Result</th><td><strong>${esc(resultDisplay)}</strong></td></tr>
+          <tr><th>Display Mode</th><td>${demoMode ? "Demo (deterministic random)" : "Calculated from numeric equation"}</td></tr>
           <tr><th>References</th><td>${esc(refsDisplay)}</td></tr>
         </table>
         ${pairsHtml}
@@ -1403,11 +1559,14 @@
             <div><label>Quotation Name</label><input data-idx="${idx}" data-field="QuotationName" /></div>
             <div class="wide formula">
               <label>Quotation Value (Formula / Number)</label>
-              <div class="field-inline">
-                <input data-idx="${idx}" data-field="QuotationValue" />
-                <button type="button" class="info-btn" data-action="formula-info" data-idx="${idx}" title="Show equation and result">i</button>
+              <div class="formula-read">
+                <span class="formula-text hidden">Hidden for cleaner UI</span>
+                <button type="button" class="sar-icon-btn" data-action="formula-info" data-idx="${idx}" title="Show SAR equation details" aria-label="Show SAR equation details">
+                  <span class="sar-glyph">ر.س</span>
+                </button>
               </div>
-              <div class="hint">Click <strong>i</strong> to view equation details and calculation flow.</div>
+              <input data-idx="${idx}" data-field="QuotationValue" style="display:none;" />
+              <div class="hint">Use the SAR icon to open equation details.</div>
             </div>
           </div>
           <details class="inline-config">
@@ -1552,15 +1711,43 @@
       el.cancelBtn.addEventListener("click", closeModal);
       el.saveBtn.addEventListener("click", saveLine);
       el.downloadJsonBtn.addEventListener("click", downloadJSON);
+      if (el.compactModeToggle) {
+        el.compactModeToggle.addEventListener("change", () => {
+          document.body.classList.toggle("compact-mode", el.compactModeToggle.checked);
+        });
+      }
+      if (el.equationCloseBtn) {
+        el.equationCloseBtn.addEventListener("click", closeEquationPopup);
+      }
+      if (el.equationOverlay) {
+        el.equationOverlay.addEventListener("click", (event) => {
+          if (event.target === el.equationOverlay) closeEquationPopup();
+        });
+      }
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          if (el.equationOverlay && el.equationOverlay.classList.contains("show")) {
+            closeEquationPopup();
+            return;
+          }
+          if (el.modal && el.modal.classList.contains("show")) closeModal();
+        }
+      });
 
       el.modal.addEventListener("click", (event) => {
         if (event.target === el.modal) closeModal();
       });
 
       [
+        el.role, el.nationality, el.contractType,
+        el.clientName, el.projectName,
         el.qty, el.baseSalary, el.allowance, el.overtime,
         el.otherCost, el.govFees, el.insurance, el.markup, el.discount
       ].forEach((input) => input.addEventListener("input", updateSummary));
+      [el.role, el.nationality, el.contractType].forEach((input) => {
+        if (input) input.addEventListener("input", updateSummary);
+        if (input) input.addEventListener("change", updateSummary);
+      });
 
       el.tabs.addEventListener("click", (event) => {
         const tab = event.target.dataset.tab;
