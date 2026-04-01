@@ -327,6 +327,28 @@ tbody tr.active td:first-child { padding-left: 16px; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .fg { display: flex; flex-direction: column; gap: 6px; }
 .fg label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+.label-with-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.eq-field-btn {
+  border: 1px solid #BFDBFE;
+  background: #EFF6FF;
+  color: var(--accent);
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.eq-field-btn:hover { background: #DBEAFE; color: var(--accent-hover); }
 .fg input, .fg select {
   border: 1px solid var(--border-color);
   background: white;
@@ -398,7 +420,20 @@ tbody tr.active td:first-child { padding-left: 16px; }
   letter-spacing: 0.02em;
 }
 .eq-inline .info-icon { font-size: 12px; font-weight: 800; line-height: 1; }
+.eq-inline-field {
+  min-width: 30px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 6px;
+  vertical-align: text-top;
+}
 .eq-inline:hover { background: #DBEAFE; color: var(--accent-hover); }
+.eq-inline-field {
+  min-width: 28px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 6px;
+}
 
 .modal-summary-sticky {
   position: sticky;
@@ -764,13 +799,13 @@ tbody tr.active td:first-child { padding-left: 16px; }
           </div>
           <div class="section-body">
             <div class="grid-2">
-              <div class="fg"><label>Markups Cost (Flat/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-mar" value="200" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Operation Fees (Flat/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-opr" value="280" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>G&A Cost (Total/mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-ga" value="275" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Sales Commission (mo)</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-com" value="25" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Other Expenses/Credits</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-oth" value="-160.72" oninput="calcPreview()"></div></div>
-              <div class="fg"><label>Utilization Risk %</label><div class="input-with-symbol"><span>%</span><input type="number" id="pr-uti" value="0" oninput="calcPreview()"></div></div>
-              <div class="fg" style="grid-column: span 2;"><label>Req. Discount Amount</label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-dsc" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Markups Cost (Flat/mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_mar')" title="Show equation details" aria-label="Markups equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Markups equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-mar" value="200" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Operation Fees (Flat/mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_opr')" title="Show equation details" aria-label="Operation fees equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Operation fees equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-opr" value="280" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>G&A Cost (Total/mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_ga')" title="Show equation details" aria-label="G&A equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">G&A equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-ga" value="275" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Sales Commission (mo) <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_com')" title="Show equation details" aria-label="Sales commission equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Sales commission equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-com" value="25" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Other Expenses/Credits <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_oth')" title="Show equation details" aria-label="Other expenses equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Other expenses equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-oth" value="-160.72" oninput="calcPreview()"></div></div>
+              <div class="fg"><label>Utilization Risk % <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_uti')" title="Show equation details" aria-label="Utilization risk equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Utilization risk equation details</span></button></label><div class="input-with-symbol"><span>%</span><input type="number" id="pr-uti" value="0" oninput="calcPreview()"></div></div>
+              <div class="fg" style="grid-column: span 2;"><label>Req. Discount Amount <button class="eq-inline eq-inline-field" onclick="showEqInfo('pr_dsc')" title="Show equation details" aria-label="Discount equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Discount equation details</span></button></label><div class="input-with-symbol"><span>SAR</span><input type="number" id="pr-dsc" value="0" oninput="calcPreview()"></div></div>
             </div>
           </div>
         </div>
@@ -837,6 +872,41 @@ const equations = {
     label: 'GP %',
     formula: 'GP % = (Project GP / Service Price) × 100',
     note: 'Margin percentage per head.'
+  },
+  pr_mar: {
+    label: 'Markups Cost (Flat/mo)',
+    formula: '=F51',
+    note: 'From your JSON: "Markups". This value is added in pricing margins.'
+  },
+  pr_opr: {
+    label: 'Operation Fees (Flat/mo)',
+    formula: '=IF(F63=3,F34,0)',
+    note: 'From your JSON: "Operation Fees". Applied based on scope/condition.'
+  },
+  pr_ga: {
+    label: 'G&A Cost (Total/mo)',
+    formula: '=D38',
+    note: 'From your JSON: "G&A Costs". Flat configured amount.'
+  },
+  pr_com: {
+    label: 'Sales Commission (mo)',
+    formula: '=300/12',
+    note: 'From your JSON: "Sales Commission". Monthly equivalent.'
+  },
+  pr_oth: {
+    label: 'Other Expenses/Credits',
+    formula: '=D92',
+    note: 'Mapped from JSON "Other Expenses" / overhead direct costs.'
+  },
+  pr_uti: {
+    label: 'Utilization Risk %',
+    formula: '= IF(OR(F14=2 ,F14= 4) , B33 * D91 / 100 , 0 )',
+    note: 'From your JSON "Utilization Cost". Percentage-based risk/load.'
+  },
+  pr_dsc: {
+    label: 'Req. Discount Amount',
+    formula: '=B46*B1/100',
+    note: 'From your JSON "Discount". Requested discount impact.'
   }
 };
 
@@ -1126,10 +1196,25 @@ function showEqInfo(key) {
     total: 'res-total',
     cost: 'res-cost',
     gp: 'res-gp',
-    gpp: 'res-gpp'
+    gpp: 'res-gpp',
+    pr_mar: 'pr-mar',
+    pr_opr: 'pr-opr',
+    pr_ga: 'pr-ga',
+    pr_com: 'pr-com',
+    pr_oth: 'pr-oth',
+    pr_uti: 'pr-uti',
+    pr_dsc: 'pr-dsc'
   };
   const currentEl = $(valueElByKey[key] || '');
-  const current = currentEl ? currentEl.textContent : 'N/A';
+  let current = 'N/A';
+  if (currentEl) {
+    if (currentEl.tagName === 'INPUT' || currentEl.tagName === 'SELECT') {
+      const isPercent = key === 'pr_uti';
+      current = (isPercent ? currentEl.value + '%' : 'SAR ' + fmt(parseFloat(currentEl.value) || 0));
+    } else {
+      current = currentEl.textContent;
+    }
+  }
   $('eqInfoTitle').textContent = 'Equation Details - ' + eq.label;
   $('eqInfoBody').innerHTML = `
     <table class="info-table">
