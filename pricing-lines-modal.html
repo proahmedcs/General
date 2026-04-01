@@ -260,8 +260,8 @@ tbody tr.active td:first-child { padding-left: 16px; }
   z-index: 20;
   background: white;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  margin-bottom: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
@@ -275,7 +275,7 @@ tbody tr.active td:first-child { padding-left: 16px; }
   background: #FAFBFF;
 }
 .summary-item {
-  padding: 10px 12px;
+  padding: 6px 10px;
   border-right: 1px dashed var(--border-color);
 }
 .summary-item:last-child {
@@ -412,26 +412,29 @@ tbody tr.active td:first-child { padding-left: 16px; }
 .eq-inline {
   border: 1px solid #BFDBFE;
   background: #EFF6FF;
-  color: var(--accent);
-  min-width: 34px;
+  color: transparent;
+  min-width: 24px;
   height: 20px;
-  padding: 0 6px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   cursor: pointer;
   margin-left: 4px;
   vertical-align: middle;
+  position: relative;
 }
-.eq-inline .sar-icon {
-  font-size: 10px;
+.eq-inline::before {
+  content: 'i';
+  color: #1D4ED8;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
   font-weight: 800;
   line-height: 1;
-  letter-spacing: 0.02em;
 }
-.eq-inline .info-icon { font-size: 12px; font-weight: 800; line-height: 1; }
+.eq-inline .sar-icon,
+.eq-inline .info-icon { display: none; }
 .eq-inline:hover { background: #DBEAFE; color: var(--accent-hover); }
 .eq-inline-field-end {
   min-width: 24px;
@@ -461,7 +464,7 @@ tbody tr.active td:first-child { padding-left: 16px; }
   background: white;
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
@@ -475,22 +478,29 @@ tbody tr.active td:first-child { padding-left: 16px; }
   background: #FAFBFF;
 }
 .summary-item {
-  padding: 10px 12px;
+  padding: 6px 10px;
   border-right: 1px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 .summary-item:last-child { border-right: 0; }
 .summary-item .lbl {
   color: var(--text-muted);
-  font-size: 11px;
-  margin-bottom: 4px;
+  font-size: 13px;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
   gap: 4px;
+  font-weight: 700;
 }
 .summary-item .val {
   font-family: var(--font-mono);
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 18px;
   color: var(--text-main);
+  white-space: nowrap;
 }
 .summary-item.accent .val { color: var(--accent); }
 .summary-item.warn .val { color: var(--warning); }
@@ -671,29 +681,29 @@ tbody tr.active td:first-child { padding-left: 16px; }
         <div class="modal-summary-sticky">
           <div class="summary-line">
             <div class="summary-item accent">
-              <div class="lbl">Service Price <button class="eq-inline" onclick="showEqInfo('svc')" title="Show equation details" aria-label="Service Price equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Service Price equation details</span></button></div>
+              <div class="lbl">Service Price <button class="eq-inline summary-eq-icon" onclick="showEqInfo('svc')" title="Show equation details" aria-label="Service Price equation details"><span class="sr-only">Service Price equation details</span></button></div>
               <div class="val" id="res-svc">SAR 0.00</div>
             </div>
             <div class="summary-item warn">
-              <div class="lbl">VAT Amount (15%) <button class="eq-inline" onclick="showEqInfo('vat')" title="Show equation details" aria-label="VAT equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">VAT equation details</span></button></div>
+              <div class="lbl">VAT Amount (15%) <button class="eq-inline summary-eq-icon" onclick="showEqInfo('vat')" title="Show equation details" aria-label="VAT equation details"><span class="sr-only">VAT equation details</span></button></div>
               <div class="val" id="res-vat">SAR 0.00</div>
             </div>
             <div class="summary-item success">
-              <div class="lbl">Net + VAT (Final) <button class="eq-inline" onclick="showEqInfo('total')" title="Show equation details" aria-label="Net plus VAT equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Net plus VAT equation details</span></button></div>
+              <div class="lbl">Net + VAT (Final) <button class="eq-inline summary-eq-icon" onclick="showEqInfo('total')" title="Show equation details" aria-label="Net plus VAT equation details"><span class="sr-only">Net plus VAT equation details</span></button></div>
               <div class="val" id="res-total">SAR 0.00</div>
             </div>
           </div>
           <div class="summary-line">
             <div class="summary-item">
-              <div class="lbl">Gross Cost <button class="eq-inline" onclick="showEqInfo('cost')" title="Show equation details" aria-label="Gross cost equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Gross cost equation details</span></button></div>
+              <div class="lbl">Gross Cost <button class="eq-inline summary-eq-icon" onclick="showEqInfo('cost')" title="Show equation details" aria-label="Gross cost equation details"><span class="sr-only">Gross cost equation details</span></button></div>
               <div class="val" id="res-cost">SAR 0.00</div>
             </div>
             <div class="summary-item danger">
-              <div class="lbl">Project GP <button class="eq-inline" onclick="showEqInfo('gp')" title="Show equation details" aria-label="Project GP equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">Project GP equation details</span></button></div>
+              <div class="lbl">Project GP <button class="eq-inline summary-eq-icon" onclick="showEqInfo('gp')" title="Show equation details" aria-label="Project GP equation details"><span class="sr-only">Project GP equation details</span></button></div>
               <div class="val" id="res-gp">SAR 0.00</div>
             </div>
             <div class="summary-item">
-              <div class="lbl">GP % <button class="eq-inline" onclick="showEqInfo('gpp')" title="Show equation details" aria-label="GP percent equation details"><span class="sar-icon" aria-hidden="true">SAR</span><span class="info-icon" aria-hidden="true">i</span><span class="sr-only">GP percent equation details</span></button></div>
+              <div class="lbl">GP % <button class="eq-inline summary-eq-icon" onclick="showEqInfo('gpp')" title="Show equation details" aria-label="GP percent equation details"><span class="sr-only">GP percent equation details</span></button></div>
               <div class="val" id="res-gpp">0.00%</div>
             </div>
           </div>
